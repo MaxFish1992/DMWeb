@@ -43,11 +43,11 @@
           <!-- <el-table-column prop="FinalAssembly" label="总装" width="120"></el-table-column> -->
           <el-table-column prop="Qualified" label="是否合格" width="120"></el-table-column>
           <el-table-column prop="LeaveFactory" label="是否出厂" width="120"></el-table-column>
-          <!-- <el-table-column prop="SprayPaint" label="工艺图" width="120">
+          <el-table-column prop="SprayPaint" label="工艺图" width="120">
             <template>
               <el-button @click="dialogPictureVisible=true" type="text" size="small">查看</el-button>
             </template>
-          </el-table-column>-->
+          </el-table-column>
           <el-table-column fixed="right" label="操作" width="150">
             <template slot-scope="scope">
               <el-button @click="showProduct(scope.row)" type="text" size="small">查看</el-button>
@@ -62,12 +62,22 @@
         </el-table>
       </el-container>
     </el-container>
-    <el-dialog title="生产信息" :visible.sync="dialogFormVisible">
+    <el-dialog title="下单" :visible.sync="dialogFormVisible">
       <el-row>
-        <el-col :span="10">
+        <el-col :span="8">
           <el-form :model="product">
             <el-form-item label="生产日期" :label-width="formLabelWidth">
               <el-input v-model="product.OrderDate" auto-complete="off" :readonly="dialogReadonly"></el-input>
+            </el-form-item>
+            <el-form-item label="交货期" :label-width="formLabelWidth">
+              <el-date-picker
+                style="width:250px;"
+                v-model="product.DeliveryDate"
+                align="right"
+                type="date"
+                placeholder="选择日期"
+                :picker-options="pickerOptions"
+              ></el-date-picker>
             </el-form-item>
             <el-form-item
               label="合同号"
@@ -123,11 +133,11 @@
             </el-form-item>
           </el-form>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="8">
           <el-collapse accordion>
             <el-collapse-item title="产品规格">
               <el-form>
-                <el-form-item label="总长" :label-width="formLabelWidth">
+                <el-form-item label="长" :label-width="formLabelWidth">
                   <el-input v-model="product.Length" auto-complete="off" :readonly="dialogReadonly"></el-input>
                 </el-form-item>
                 <el-form-item label="宽" :label-width="formLabelWidth">
@@ -153,7 +163,11 @@
                   </el-col>
                   <el-col :span="12">
                     <el-form-item label="材料">
-                      <el-select v-model="product.SideBoardMaterial" placeholder="请选择">
+                      <el-select
+                        v-model="product.SideBoardMaterial"
+                        placeholder="请选择"
+                        style="width:200px;"
+                      >
                         <el-option
                           v-for="item in sideboardTypes"
                           :key="item.value"
@@ -181,7 +195,11 @@
                   </el-col>
                   <el-col :span="12">
                     <el-form-item label="材料">
-                      <el-select v-model="product.FloorMaterial" placeholder="请选择">
+                      <el-select
+                        v-model="product.FloorMaterial"
+                        placeholder="请选择"
+                        style="width:200px;"
+                      >
                         <el-option
                           v-for="item in sideboardTypes"
                           :key="item.value"
@@ -197,13 +215,25 @@
             <el-collapse-item title="轮胎">
               <el-form>
                 <el-form-item label="品牌" :label-width="formLabelWidth">
-                  <el-input v-model="product.Length" auto-complete="off" :readonly="dialogReadonly"></el-input>
+                  <el-input
+                    v-model="product.TireBrand"
+                    auto-complete="off"
+                    :readonly="dialogReadonly"
+                  ></el-input>
                 </el-form-item>
                 <el-form-item label="花色" :label-width="formLabelWidth">
-                  <el-input v-model="product.Width" auto-complete="off" :readonly="dialogReadonly"></el-input>
+                  <el-input
+                    v-model="product.TireShape"
+                    auto-complete="off"
+                    :readonly="dialogReadonly"
+                  ></el-input>
                 </el-form-item>
                 <el-form-item label="数量" :label-width="formLabelWidth">
-                  <el-input v-model="product.Height" auto-complete="off" :readonly="dialogReadonly"></el-input>
+                  <el-input
+                    v-model="product.TireNum"
+                    auto-complete="off"
+                    :readonly="dialogReadonly"
+                  ></el-input>
                 </el-form-item>
               </el-form>
             </el-collapse-item>
@@ -214,7 +244,7 @@
                     <el-form-item label="个数">
                       <el-input
                         style="width:180px;"
-                        v-model="product.SideBoardThickness"
+                        v-model="product.SteelRingNum"
                         auto-complete="off"
                         :readonly="dialogReadonly"
                       ></el-input>
@@ -222,7 +252,11 @@
                   </el-col>
                   <el-col :span="12">
                     <el-form-item label="材料">
-                      <el-select v-model="product.SideBoardMaterial" placeholder="请选择">
+                      <el-select
+                        v-model="product.SteelRingMaterial"
+                        placeholder="请选择"
+                        style="width:200px;"
+                      >
                         <el-option
                           v-for="item in steelRingTypes"
                           :key="item.value"
@@ -238,13 +272,25 @@
             <el-collapse-item title="板簧">
               <el-form>
                 <el-form-item label="品牌" :label-width="formLabelWidth">
-                  <el-input v-model="product.Length" auto-complete="off" :readonly="dialogReadonly"></el-input>
+                  <el-input
+                    v-model="product.PlateSpringBrand"
+                    auto-complete="off"
+                    :readonly="dialogReadonly"
+                  ></el-input>
                 </el-form-item>
                 <el-form-item label="厚度" :label-width="formLabelWidth">
-                  <el-input v-model="product.Width" auto-complete="off" :readonly="dialogReadonly"></el-input>
+                  <el-input
+                    v-model="product.PlateSpringThickness"
+                    auto-complete="off"
+                    :readonly="dialogReadonly"
+                  ></el-input>
                 </el-form-item>
                 <el-form-item label="片数" :label-width="formLabelWidth">
-                  <el-input v-model="product.Height" auto-complete="off" :readonly="dialogReadonly"></el-input>
+                  <el-input
+                    v-model="product.PlateSpringBrand"
+                    auto-complete="off"
+                    :readonly="dialogReadonly"
+                  ></el-input>
                 </el-form-item>
               </el-form>
             </el-collapse-item>
@@ -255,7 +301,7 @@
                     <el-form-item label="品牌">
                       <el-input
                         style="width:180px;"
-                        v-model="product.FloorThickness"
+                        v-model="product.HydraulicBrand"
                         auto-complete="off"
                         :readonly="dialogReadonly"
                       ></el-input>
@@ -265,7 +311,7 @@
                     <el-form-item label="型号">
                       <el-input
                         style="width:180px;"
-                        v-model="product.FloorThickness"
+                        v-model="product.HydraulicModel"
                         auto-complete="off"
                         :readonly="dialogReadonly"
                       ></el-input>
@@ -276,10 +322,10 @@
             </el-collapse-item>
           </el-collapse>
           <el-row>
-            <el-col :span="12">
+            <el-col :span="10">
               <el-form style="margin-top:20px;">
                 <el-form-item label="车桥" :label-width="formLabelWidth">
-                  <el-select v-model="product.FloorMaterial" placeholder="请选择" style="width:180px;">
+                  <el-select v-model="product.Axle" placeholder="请选择" style="width:180px;">
                     <el-option
                       v-for="item in axleTypes"
                       :key="item.value"
@@ -289,7 +335,11 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="空气悬架" :label-width="formLabelWidth">
-                  <el-select v-model="product.FloorMaterial" placeholder="请选择" style="width:180px;">
+                  <el-select
+                    v-model="product.HasAirSuspension"
+                    placeholder="请选择"
+                    style="width:180px;"
+                  >
                     <el-option
                       v-for="item in hasOrNot"
                       :key="item.value"
@@ -299,7 +349,11 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="自动调整臂" :label-width="formLabelWidth">
-                  <el-select v-model="product.FloorMaterial" placeholder="请选择" style="width:180px;">
+                  <el-select
+                    v-model="product.HasAdjustingArm"
+                    placeholder="请选择"
+                    style="width:180px;"
+                  >
                     <el-option
                       v-for="item in hasOrNot"
                       :key="item.value"
@@ -309,7 +363,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="ABS" :label-width="formLabelWidth">
-                  <el-select v-model="product.FloorMaterial" placeholder="请选择" style="width:180px;">
+                  <el-select v-model="product.ABS" placeholder="请选择" style="width:180px;">
                     <el-option
                       v-for="item in absTypes"
                       :key="item.value"
@@ -321,20 +375,39 @@
               </el-form>
             </el-col>
             <el-col :span="12">
-              <el-form style="margin-top:20px;margin-left:30px;">
-                <el-form-item>
-                  <el-card class="box-card" style="width:250px;">
-                    <div style="padding: 0px;margin-top:0px;">
-                      <span>其它配置</span>
-                    </div>
-                    <el-input type="textarea" :rows="6" placeholder="请输入内容" v-model="textarea"></el-input>
-                  </el-card>
+              <el-form style="margin-top:20px;margin-left:100px;">
+                <el-form-item label="后门">
+                  <el-input
+                    style="width:120px;"
+                    v-model="product.BackDoorType"
+                    auto-complete="off"
+                    :readonly="dialogReadonly"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item label="喷涂">
+                  <el-input
+                    style="width:120px;"
+                    v-model="product.CarriageColor"
+                    auto-complete="off"
+                    :readonly="dialogReadonly"
+                  ></el-input>
                 </el-form-item>
               </el-form>
             </el-col>
           </el-row>
         </el-col>
-        <!-- <el-col :span="8"></el-col> -->
+        <el-col :span="8">
+          <el-form style="margin-top:0px;margin-left:30px;">
+            <el-form-item>
+              <el-card class="box-card" style="width:480px;">
+                <div style="padding: 0px;margin-top:0px;">
+                  <span>其它配置</span>
+                </div>
+                <el-input type="textarea" :rows="24" placeholder="请输入内容" v-model="product.Mark"></el-input>
+              </el-card>
+            </el-form-item>
+          </el-form>
+        </el-col>
       </el-row>
       <div id="qrcode" class="qrcode" ref="qrCodeUrl"></div>
       <div slot="footer" class="dialog-footer">
@@ -384,7 +457,7 @@
   max-width: 250px;
 }
 .el-dialog {
-  width: 1200px;
+  width: 1600px;
 }
 .el-select {
   width: 350px;
@@ -483,17 +556,42 @@ export default {
           label: "威薄科",
         },
       ],
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > Date.now();
+        },
+        shortcuts: [
+          {
+            text: "一周后",
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() + 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", date);
+            },
+          },
+          {
+            text: "半个月后",
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() + 3600 * 1000 * 24 * 7 * 2);
+              picker.$emit("pick", date);
+            },
+          },
+        ],
+      },
       tableData: [],
       product: {
         OrderDate: "",
+        DeliveryDate: "",
         ProductNumber: "",
         VIN: "",
+        CustomerName: "",
+        CustomerPhone: "",
         Drawing: "",
         Blanking: "",
-        // SideBoard: "",
-        // Floor: "",
-        // FrontDoor: "",
-        // BackDoor: "",
+        CloseCompartment: "",
+        LeaveFactory: "",
+        Qualified: "",
         Length: "",
         Width: "",
         Height: "",
@@ -501,9 +599,23 @@ export default {
         SideBoardMaterial: "",
         FloorThickness: "",
         FloorMaterial: "",
-        CloseCompartment: "",
-        LeaveFactory: "",
-        Qualified: "",
+        Axle: "",
+        HasAdjustingArm: "",
+        HasAirSuspension: "",
+        ABS: "",
+        TireBrand: "",
+        TireShape: "",
+        TireNum: "",
+        SteelRingMaterial: "",
+        SteelRingNum: "",
+        PlateSpringBrand: "",
+        PlateSpringThickness: "",
+        PlateSpringNum: "",
+        HydraulicBrand: "",
+        HydraulicModel: "",
+        BackDoorType: "",
+        CarriageColor: "",
+        Mark: "",
       },
       qrcode: {},
       search: "",
@@ -729,22 +841,24 @@ export default {
         //   duration: 3000,
         // });
 
-        if (this.code == this.product.VIN) {
-          this.product.Drawing = "有";
-          let params = { orderJson: this.product };
-          https
-            .fetchGet("Order/update", params)
-            .then((data) => {
-              this.$notify({
-                title: "提示",
-                message: data.data,
-                duration: 3000,
-              });
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }
+        // if (this.code == this.product.VIN) {
+        // this.product.Drawing = "有";
+        let params = { vin: this.code };
+        https
+          .fetchGet("Order/getsingle", params)
+          .then((data) => {
+            // this.$notify({
+            //   title: "提示",
+            //   message: data.data,
+            //   duration: 3000,
+            // });
+            this.product = data.data;
+            this.dialogFormVisible = true;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        // }
 
         this.onchange && this.onchange(this.code);
 
