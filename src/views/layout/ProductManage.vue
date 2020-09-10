@@ -19,7 +19,7 @@
       <el-container>
         <el-header style="text-align: right; font-size: 16px">
           <el-input
-            v-model="search"
+            v-model="searchProduct"
             size="mini"
             placeholder="输入关键字搜索"
             style="width:200px;margin-right:20px;"
@@ -27,7 +27,7 @@
           <el-button type="text" @click="addProduct()">新增</el-button>
           <el-button type="text" @click="exitSystem()">退出</el-button>
         </el-header>
-        <el-table :data="tableData" style="width: 100%;" max-height="855">
+        <el-table :data="filterData" style="width: 100%;" max-height="855">
           <el-table-column fixed prop="OrderDate" label="日期" width="150"></el-table-column>
           <el-table-column prop="ProductNumber" label="合同号" width="120"></el-table-column>
           <el-table-column prop="VIN" label="VIN" width="120"></el-table-column>
@@ -44,8 +44,8 @@
           <el-table-column prop="Qualified" label="是否合格" width="120"></el-table-column>
           <el-table-column prop="LeaveFactory" label="是否出厂" width="120"></el-table-column>
           <el-table-column prop="SprayPaint" label="工艺图" width="120">
-            <template>
-              <el-button @click="dialogPictureVisible=true" type="text" size="small">查看</el-button>
+            <template slot-scope="scope">
+              <el-button @click="uploadDrawing(scope.row)" type="text" size="small">查看</el-button>
             </template>
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="150">
@@ -62,7 +62,7 @@
         </el-table>
       </el-container>
     </el-container>
-    <el-dialog title="下单" :visible.sync="dialogFormVisible">
+    <el-dialog title="生产信息" :visible.sync="dialogFormVisible" customClass="customWidth">
       <el-row>
         <el-col :span="8">
           <el-form :model="product">
@@ -417,25 +417,36 @@
       </div>
     </el-dialog>
     <el-dialog title="工艺图" :visible.sync="dialogPictureVisible">
+      <!-- <div>
+        <Upload multiple type="drag" action="http://localhost:50792/Upload">
+          <div style="padding: 20px 0">
+            <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+            <p>点击或将文件拖拽到这里上传</p>
+          </div>
+        </Upload>
+      </div>-->
       <el-upload
         class="upload-demo"
-        ref="upload"
-        action="http://localhost:62009/api/Image/Upload"
+        action="http://localhost:50792/Upload"
+        ref="newupload"
+        :before-upload="beforeUpload"
         :on-preview="handlePreview"
         :on-remove="handleRemove"
         :file-list="imageList"
-        :auto-upload="false"
-        list-type="picture-card"
+        :auto-upload="true"
+        list-type="picture"
       >
-        <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-        <el-button
-          style="margin-left: 10px;"
-          size="small"
-          type="success"
-          @click="uploadImage"
-        >上传到服务器</el-button>
+        <el-button size="small" type="primary">选择图片</el-button>
+        <!-- <el-button size="small" type="primary" @click="newSubmitForm()" class="yes-btn">确 定</el-button> -->
         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
       </el-upload>
+
+      <!-- <Upload multiple type="drag" action="http://localhost:50792/Upload">
+        <div style="padding: 20px 0">
+          <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+          <p>点击或将文件拖拽到这里上传</p>
+        </div>
+      </Upload>-->
     </el-dialog>
   </el-container>
 </template>
@@ -456,8 +467,11 @@
 .el-input {
   max-width: 250px;
 }
-.el-dialog {
-  width: 1600px;
+/* .el-dialog {
+  width: 82%;
+} */
+.customWidth {
+  width: 82%;
 }
 .el-select {
   width: 350px;
@@ -478,6 +492,19 @@
 import qs from "qs";
 import https from "../../https.js";
 import QRCode from "qrcodejs2";
+import axios from "axios";
+
+export function startUpload(data) {
+  return axios({
+    method: "post",
+    url: "http://localhost:50792/Upload",
+    timeout: 20000,
+    data: data,
+    dataType: "json",
+    contentType: "application/json",
+  });
+}
+
 export default {
   data() {
     return {
@@ -557,9 +584,9 @@ export default {
         },
       ],
       pickerOptions: {
-        disabledDate(time) {
-          return time.getTime() > Date.now();
-        },
+        // disabledDate(time) {
+        //   return time.getTime() > Date.now();
+        // },
         shortcuts: [
           {
             text: "一周后",
@@ -618,11 +645,43 @@ export default {
         Mark: "",
       },
       qrcode: {},
-      search: "",
+      searchProduct: "",
     };
   },
   methods: {
     handleSelect() {},
+    beforeUpload() {
+      let fd = new FormData();
+      fd.append("vin", this.product.VIN);
+
+      let params = { vin: this.product.VIN };
+      https
+        .fetchGet("Upload/setvin", params)
+        .then((data) => {
+          this.$notify({
+            title: "提示",
+            message: data.data,
+            duration: 3000,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      startUpload(fd).then((res) => {
+        console.log(res);
+      });
+
+      return true;
+    },
+    newSubmitForm() {
+      this.$refs.newupload.submit();
+    },
+    //上传工艺图
+    uploadDrawing(product) {
+      this.dialogPictureVisible = true;
+      this.product = product;
+    },
     //查看生产信息
     showProduct(product) {
       this.dialogFormVisible = true;
@@ -790,27 +849,42 @@ export default {
   },
   computed: {
     // 模糊搜索
+    // filterData: function () {
+    //   const search = this.search;
+    //   if (search) {
+    //     // filter() 方法创建一个新的数组，新数组中的元素是通过检查指定数组中符合条件的所有元素。
+    //     // 注意： filter() 不会对空数组进行检测。
+    //     // 注意： filter() 不会改变原始数组。
+    //     return this.tableData.filter((data) => {
+    //       // some() 方法用于检测数组中的元素是否满足指定条件;
+    //       // some() 方法会依次执行数组的每个元素：
+    //       // 如果有一个元素满足条件，则表达式返回true , 剩余的元素不会再执行检测;
+    //       // 如果没有满足条件的元素，则返回false。
+    //       // 注意： some() 不会对空数组进行检测。
+    //       // 注意： some() 不会改变原始数组。
+    //       return Object.keys(data).some((key) => {
+    //         // indexOf() 返回某个指定的字符在某个字符串中首次出现的位置，如果没有找到就返回-1；
+    //         // 该方法对大小写敏感！所以之前需要toLowerCase()方法将所有查询到内容变为小写。
+    //         return String(data[key]).toLowerCase().indexOf(search) > -1;
+    //       });
+    //     });
+    //   }
+    //   return this.tableData;
+    // },
     filterData: function () {
-      const search = this.search;
-      if (search) {
-        // filter() 方法创建一个新的数组，新数组中的元素是通过检查指定数组中符合条件的所有元素。
-        // 注意： filter() 不会对空数组进行检测。
-        // 注意： filter() 不会改变原始数组。
-        return this.tableData.filter((data) => {
-          // some() 方法用于检测数组中的元素是否满足指定条件;
-          // some() 方法会依次执行数组的每个元素：
-          // 如果有一个元素满足条件，则表达式返回true , 剩余的元素不会再执行检测;
-          // 如果没有满足条件的元素，则返回false。
-          // 注意： some() 不会对空数组进行检测。
-          // 注意： some() 不会改变原始数组。
-          return Object.keys(data).some((key) => {
-            // indexOf() 返回某个指定的字符在某个字符串中首次出现的位置，如果没有找到就返回-1；
-            // 该方法对大小写敏感！所以之前需要toLowerCase()方法将所有查询到内容变为小写。
-            return String(data[key]).toLowerCase().indexOf(search) > -1;
+      var input = this.searchProduct && this.searchProduct.toLowerCase();
+      var items = this.tableData;
+      var items1;
+      if (input) {
+        items1 = items.filter(function (item) {
+          return Object.keys(item).some(function (key1) {
+            return String(item[key1]).toLowerCase().match(input);
           });
         });
+      } else {
+        items1 = items;
       }
-      return this.tableData;
+      return items1;
     },
   },
   created: function () {

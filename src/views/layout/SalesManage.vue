@@ -48,7 +48,7 @@
           </el-table-column>
         </el-table>
       </el-container>
-      <el-dialog title="销售信息" :visible.sync="dialogFormVisible">
+      <el-dialog title="销售信息" :visible.sync="dialogFormVisible"  customClass="customWidth">
         <el-form :model="currentSale">
           <el-form-item label="签订日期" :label-width="formLabelWidth">
             <el-input v-model="currentSale.SignDate" auto-complete="off" :readonly="dialogReadonly"></el-input>

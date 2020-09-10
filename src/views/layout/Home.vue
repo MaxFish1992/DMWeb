@@ -19,7 +19,7 @@
         <el-image :src="imgSrc" style="max-height:867px;"></el-image>
       </el-container>
     </el-container>
-    <el-dialog title="订单信息" :visible.sync="orderDialogVisible">
+    <el-dialog title="订单信息" :visible.sync="orderDialogVisible"  customClass="customWidth">
       <el-row>
         <el-col :span="6">
           <el-form>

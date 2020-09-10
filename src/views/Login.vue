@@ -10,11 +10,11 @@
           </el-form-item>
           <!-- 用户名 -->
           <el-form-item>
-            <el-input placeholder="用户名" v-model="userName"></el-input>
+            <el-input placeholder="用户名" v-model="user.userName"></el-input>
           </el-form-item>
           <!-- 密码 -->
           <el-form-item>
-            <el-input placeholder="密码" v-model="password" show-password></el-input>
+            <el-input placeholder="密码" v-model="user.password" show-password></el-input>
           </el-form-item>
           <!-- 验证码 -->
           <!-- <el-form-item>
@@ -63,22 +63,25 @@ export default {
   data() {
     return {
       imgSrc: require("../assets/images/wxjz.jpg"),
-      userName: "",
-      password: "",
+      user: {
+        userName: "",
+        password: "",
+        Authority: "",
+      },
     };
   },
   methods: {
     login: function () {
       // this.$router.push("/home");
       var _this = this;
-      let params = { userName: _this.userName };
+      let params = { userName: _this.user.userName };
       https
-        .fetchGet("User/getpassword", params)
+        .fetchGet("User/getuser", params)
         .then((data) => {
-          // this.base.token = data.data.token;
-          // console.log("this.base.tokenthis.base.token",this.base.token)
-          // this.indexPost2(this.rres);
-          if (data.data == _this.password) {
+          this.$root.user = data.data;
+          this.user = data.data;
+
+          if (this.user.password == _this.password) {
             this.$router.push("/home");
           } else {
             alert("用户名或密码错误");
@@ -102,7 +105,7 @@ export default {
   background-size: cover;
   height: 100%;
   width: 100%;
-  z-index:1;
+  z-index: 1;
   position: absolute;
 }
 .login_box {
