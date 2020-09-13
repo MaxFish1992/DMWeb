@@ -427,7 +427,7 @@
       </div>-->
       <el-upload
         class="upload-demo"
-        action="http://localhost:50792/Upload"
+        action="http://192.168.1.105:8090/Upload"
         ref="newupload"
         :before-upload="beforeUpload"
         :on-preview="handlePreview"
@@ -593,6 +593,14 @@ export default {
             onClick(picker) {
               const date = new Date();
               date.setTime(date.getTime() + 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", date);
+            },
+          },
+          {
+            text: "10天后",
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() + 3600 * 1000 * 24 * 10);
               picker.$emit("pick", date);
             },
           },
