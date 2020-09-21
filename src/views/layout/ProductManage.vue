@@ -76,6 +76,8 @@
                 v-model="product.DeliveryDate"
                 align="right"
                 type="date"
+                format="yyyy 年 MM 月 dd 日"
+                value-format="yyyy年MM月dd 日"
                 placeholder="选择日期"
                 :picker-options="pickerOptions"
               ></el-date-picker>
@@ -288,7 +290,7 @@
                 </el-form-item>
                 <el-form-item label="片数" :label-width="formLabelWidth">
                   <el-input
-                    v-model="product.PlateSpringBrand"
+                    v-model="product.PlateSpringNum"
                     auto-complete="off"
                     :readonly="dialogReadonly"
                   ></el-input>
@@ -655,6 +657,7 @@ export default {
       },
       qrcode: {},
       searchProduct: "",
+      durationTime:2000,
     };
   },
   methods: {
@@ -670,7 +673,7 @@ export default {
           this.$notify({
             title: "提示",
             message: data.data,
-            duration: 3000,
+            duration: this.durationTime,
           });
         })
         .catch((err) => {
@@ -760,7 +763,7 @@ export default {
           this.$notify({
             title: "提示",
             message: data.data,
-            duration: 3000,
+            duration: this.durationTime,
           });
           if (data.data == "删除成功") {
             this.tableData.splice(this.tableData.indexOf(product), 1); //删除表格信息
@@ -775,14 +778,14 @@ export default {
       this.dialogFormVisible = true;
 
       if (this.operationType == "2") {
-        let params = { orderJson: this.product };
+        let params = { orderJson: JSON.stringify(this.product) };
         https
           .fetchGet("Order/add", params)
           .then((data) => {
             this.$notify({
               title: "提示",
               message: data.data,
-              duration: 3000,
+              duration: this.durationTime,
             });
             if (data.data == "添加成功") {
               this.tableData.push(this.product);
@@ -800,7 +803,7 @@ export default {
             this.$notify({
               title: "提示",
               message: data.data,
-              duration: 3000,
+              duration: this.durationTime,
             });
           })
           .catch((err) => {
@@ -837,14 +840,14 @@ export default {
         this.$notify({
           title: "提示",
           message: "只支持jpg或png格式图片",
-          duration: 3000,
+          duration: this.durationTime,
         });
       }
       if (!isLt5M) {
         this.$notify({
           title: "提示",
           message: "请上传5MB以内的图片",
-          duration: 3000,
+          duration: this.durationTime,
         });
       }
       return (isJPG || isJPG2 || isPNG) && isLt5M;
@@ -862,13 +865,13 @@ export default {
             this.$notify({
               title: "提示",
               message: res.data,
-              duration: 3000,
+              duration: this.durationTime,
             });
           } else {
             this.$notify({
               title: "提示",
               message: "上传失败",
-              duration: 3000,
+              duration: this.durationTime,
             });
           }
         })
