@@ -45,7 +45,8 @@
           <el-table-column prop="LeaveFactory" label="是否出厂" width="120"></el-table-column>
           <el-table-column prop="SprayPaint" label="工艺图" width="120">
             <template slot-scope="scope">
-              <el-button @click="uploadDrawing(scope.row)" type="text" size="small">查看</el-button>
+              <el-button @click="uploadDrawing(scope.row)" type="text" size="small">上传</el-button>
+              <el-button @click="showDrawing(scope.row)" type="text" size="small">查看</el-button>
             </template>
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="150">
@@ -417,14 +418,6 @@
       </div>
     </el-dialog>
     <el-dialog title="工艺图" :visible.sync="dialogPictureVisible">
-      <!-- <div>
-        <Upload multiple type="drag" action="http://localhost:50792/Upload">
-          <div style="padding: 20px 0">
-            <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-            <p>点击或将文件拖拽到这里上传</p>
-          </div>
-        </Upload>
-      </div>-->
       <el-upload
         class="upload-demo"
         action="http://192.168.1.105:8090/Upload"
@@ -440,13 +433,18 @@
         <!-- <el-button size="small" type="primary" @click="newSubmitForm()" class="yes-btn">确 定</el-button> -->
         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
       </el-upload>
-
-      <!-- <Upload multiple type="drag" action="http://localhost:50792/Upload">
-        <div style="padding: 20px 0">
-          <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-          <p>点击或将文件拖拽到这里上传</p>
-        </div>
-      </Upload>-->
+    </el-dialog>
+    <el-dialog title="工艺图" :visible.sync="dialogDrawingVisible">
+      <div>
+        <ol>
+          <ul
+            v-for="image in imagenames"
+            :key="image"
+            @click="previewDrawing(image.FileName)"
+          >{{ image.FileName }}</ul>
+        </ol>
+        <img :src="imageUrl" />
+      </div>
     </el-dialog>
   </el-container>
 </template>
@@ -510,12 +508,15 @@ export default {
     return {
       formLabelWidth: "120px",
       dialogPictureVisible: false,
+      dialogDrawingVisible: false,
       dialogFormVisible: false,
       dialogReadonly: false,
       operationType: "1", // 操作类型,添加、编辑、查看
       activeIndex: "1",
       iconVal: "",
       imageList: [],
+      imagenames: [],
+      imageUrl: "",
       imgSrc: require("../../assets/images/wxjz.jpg"),
       navList: [
         { name: "/home", navItem: "首页" },
@@ -689,6 +690,34 @@ export default {
     uploadDrawing(product) {
       this.dialogPictureVisible = true;
       this.product = product;
+    },
+    //查看工艺图
+    showDrawing(product) {
+      this.dialogDrawingVisible = true;
+      this.product = product;
+      let params = { vin: product.VIN };
+      https
+        .fetchGet("Download/getfilenames", params)
+        .then((data) => {
+          this.imagenames = data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    //预览工艺图
+    previewDrawing(filename) {
+      console.log(filename);
+      let params = { vin: this.product.VIN, fileName: filename };
+      https
+        .fetchGet("Download/getfile", params)
+        .then((data) => {
+          this.imageUrl = data.data;
+          console.log("imageUrl:" + this.imageUrl);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     //查看生产信息
     showProduct(product) {

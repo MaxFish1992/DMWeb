@@ -34,7 +34,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <vue-particles
+      <!-- <vue-particles
         color="#fff"
         :particleOpacity="0.7"
         :particlesNumber="60"
@@ -52,12 +52,13 @@
         clickMode="push"
         class="lizi"
         style="height:100%"
-      ></vue-particles>
+      ></vue-particles>-->
     </div>
   </div>
 </template>
 <script>
 import https from "../https.js"; // 注意用自己的路径
+import store from "../store/index.js";
 export default {
   name: "login_container",
   data() {
@@ -73,18 +74,31 @@ export default {
   methods: {
     login: function () {
       // this.$router.push("/home");
-      var _this = this;
-      let params = { userName: _this.user.userName };
+      let params = {
+        userName: this.user.userName,
+        password: this.user.password,
+      };
       https
-        .fetchGet("User/getuser", params)
-        .then((data) => {
-          this.$root.user = data.data;
-          this.user = data.data;
+        .fetchGet("User/login", params)
+        .then((res) => {
+          this.$root.user = this.user;
+          this.$root.user.Authority = res.data.Authority;
+          console.log(this.$root.user);
+          if (res.data.Mark == 1 && res.data.Token != "") {
+            //保存token到状态
+            store.commit("changeToken", res.data); ///////提交状态
+            localStorage.setItem("token", res.data.token); //////token保存到localStorage
+            this.$axios.defaults.headers.common["Authority"] =
+              "Bearer " + res.data.token;
 
-          if (this.user.password == _this.password) {
-            this.$router.push("/home");
+            // alert("登录成功");
+            //跳转到首页
+            this.$router.push({
+              path: "/home",
+            });
           } else {
-            alert("用户名或密码错误");
+            //错误提示
+            alert("登录失败");
           }
         })
         .catch((err) => {

@@ -19,7 +19,7 @@
         <el-image :src="imgSrc" style="max-height:867px;"></el-image>
       </el-container>
     </el-container>
-    <el-dialog title="订单信息" :visible.sync="orderDialogVisible"  customClass="customWidth">
+    <el-dialog title="订单信息" :visible.sync="orderDialogVisible" customClass="customWidth">
       <el-row>
         <el-col :span="6">
           <el-form>
@@ -133,7 +133,7 @@
             </el-form-item>
             <el-form-item label="其它" :label-width="formLabelWidth" style="color:red"></el-form-item>
             <el-form-item
-              label="product.Markasdjojsfo几点去减肥减肥强迫甲方确认迫切的脾气欧伟平亲王而且我i额抛弃我i额剽窃破i去脾气文凭"
+              :label="product.Mark"
               label-width="300px"
             ></el-form-item>
           </el-form>
@@ -234,17 +234,20 @@ export default {
         if (this.code.length < 3) return; // 手动输入的时间不会让code的长度大于2，所以这里只会对扫码枪有
         // 获取到扫码枪输入的内容，做别的操作
 
-        // this.$notify({
-        //   title: "提示",
-        //   message: this.code,
-        //   duration: 3000,
-        // });
+        this.code.replace("undefined", "");
+        this.$notify({
+          title: "提示",
+          message: this.code,
+          duration: 3000,
+        });
 
         this.orderDialogVisible = true;
+        console.log(this.code);
         let params = { vin: this.code };
         https
           .fetchGet("Order/getsingle", params)
           .then((data) => {
+            console.log(data.data);
             this.product = data.data;
           })
           .catch((err) => {

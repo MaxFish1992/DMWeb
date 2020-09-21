@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -52,4 +52,28 @@ export default new Router({
       component: () => import('../views/layout/SalesManage.vue')
     }
   ]
+});
+
+router.beforeEach((to, from, next) => {
+  if (localStorage.getItem('token') != '') {//store.state.token
+      console.log("333")
+      next()
+  }
+  else {
+      console.log("444")
+      if (to.path == '/login') {//如果是登录页面路径，就直接next()
+          next();
+      } else {//不然就跳转到登录；
+          //再用一个 if else判断，防止死循环
+          if (from.path.indexOf('/index') != -1) {
+              next('/login');
+          }
+          else {
+              next('/login');
+          }
+          //next('/userlogin');
+      }
+  }
 })
+
+export default router;
