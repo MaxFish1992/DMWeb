@@ -39,16 +39,12 @@
             <template slot-scope="scope">
               <el-button @click="showSale(scope.row)" type="text" size="small">查看</el-button>
               <el-button @click="editSale(scope.row)" type="text" size="small">编辑</el-button>
-              <el-button
-                @click.native.prevent="deleteSale(scope.row)"
-                type="text"
-                size="small"
-              >移除</el-button>
+              <el-button @click.native.prevent="deleteSale(scope.row)" type="text" size="small">移除</el-button>
             </template>
           </el-table-column>
         </el-table>
       </el-container>
-      <el-dialog title="销售信息" :visible.sync="dialogFormVisible"  customClass="customWidth">
+      <el-dialog title="销售信息" :visible.sync="dialogFormVisible" customClass="customWidth">
         <el-form :model="currentSale">
           <el-form-item label="签订日期" :label-width="formLabelWidth">
             <el-input v-model="currentSale.SignDate" auto-complete="off" :readonly="dialogReadonly"></el-input>
@@ -134,8 +130,8 @@ export default {
       imgSrc: require("../../assets/images/wxjz.jpg"),
       navList: [
         { name: "/home", navItem: "首页" },
-        { name: "/productmanage", navItem: "生产管理" },
-        { name: "/salesmanage", navItem: "销售管理" },
+        { name: "/productmanage", navItem: "销售订单" },
+        { name: "/salesmanage", navItem: "生产进度" },
         // { name: "/financialmanage", navItem: "财务管理" },
         // { name: "/procurementmanage", navItem: "进销存管理" },
         { name: "/about", navItem: "关于" },

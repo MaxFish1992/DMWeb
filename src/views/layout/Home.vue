@@ -206,8 +206,8 @@ export default {
       imgSrc: require("../../assets/images/wxjz.jpg"),
       navList: [
         { name: "/home", navItem: "首页" },
-        { name: "/productmanage", navItem: "生产管理" },
-        // { name: "/salesmanage", navItem: "销售管理" },
+        { name: "/productmanage", navItem: "销售订单" },
+        { name: "/salesmanage", navItem: "生产进度" },
         // { name: "/financialmanage", navItem: "财务管理" },
         // { name: "/procurementmanage", navItem: "进销存管理" },
         { name: "/about", navItem: "关于" },

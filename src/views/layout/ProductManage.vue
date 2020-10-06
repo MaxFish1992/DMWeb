@@ -440,8 +440,8 @@
       <div>
         <ol>
           <ul
-            v-for="image in imagenames"
-            :key="image"
+            v-for="(image) in imagenames"
+            :key="image.index"
             @click="previewDrawing(image.FileName)"
           >{{ image.FileName }}</ul>
         </ol>
@@ -522,8 +522,8 @@ export default {
       imgSrc: require("../../assets/images/wxjz.jpg"),
       navList: [
         { name: "/home", navItem: "首页" },
-        { name: "/productmanage", navItem: "生产管理" },
-        // { name: "/salesmanage", navItem: "销售管理" },
+        { name: "/productmanage", navItem: "销售订单" },
+        { name: "/salesmanage", navItem: "生产进度" },
         // { name: "/financialmanage", navItem: "财务管理" },
         // { name: "/procurementmanage", navItem: "进销存管理" },
         { name: "/about", navItem: "关于" },
@@ -657,7 +657,7 @@ export default {
       },
       qrcode: {},
       searchProduct: "",
-      durationTime:2000,
+      durationTime: 2000,
     };
   },
   methods: {
@@ -710,17 +710,28 @@ export default {
     },
     //预览工艺图
     previewDrawing(filename) {
-      console.log(filename);
-      let params = { vin: this.product.VIN, fileName: filename };
-      https
-        .fetchGet("Download/getfile", params)
-        .then((data) => {
-          this.imageUrl = data.data;
-          console.log("imageUrl:" + this.imageUrl);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      this.imageUrl =
+        "http://192.168.1.105:8090/Download/getimage?vin=" +
+        this.product.VIN +
+        "&fileName=" +
+        filename;
+      // console.log(filename);
+      // let params = { vin: this.product.VIN, fileName: filename };
+      // https
+      //   .fetchGet("Download/getimage", params)
+      //   .then((data) => {
+      //     // this.imageUrl = data.data;
+      //     //这里就是将得到的图片流转换成blob类型
+      //     const blob = new Blob([data.data], {
+      //       type: "application/png;charset=utf-8",
+      //     });
+      //     const url = window.URL.createObjectURL(blob);
+      //     this.imageUrl = url;
+      //     console.log("imageUrl:" + this.imageUrl);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
     },
     //查看生产信息
     showProduct(product) {
