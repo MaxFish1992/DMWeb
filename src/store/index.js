@@ -6,17 +6,16 @@ const store = new Vuex.Store({
  
   state: {
     // 存储token
-    Authority: localStorage.getItem('Authority') ? localStorage.getItem('Authority') : '',
+    Authorization: localStorage.getItem('Authorization') ? localStorage.getItem('Authorization') : ''
   },
  
   mutations: {
     // 修改token，并将token存入localStorage
-    changeToken (state, user) {
-      state.Authority = user.Authority;
-      localStorage.setItem('Authority', user.Authority);
+    changeLogin (state, user) {
+      state.Authorization = user.Authorization;
+      localStorage.setItem('Authorization', user.Authorization);
     }
-  },
-  token: "",
+  }
 });
  
 export default store;

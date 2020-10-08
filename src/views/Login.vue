@@ -57,6 +57,7 @@
   </div>
 </template>
 <script>
+import { mapMutations } from 'vuex';
 import https from "../https.js"; // 注意用自己的路径
 import store from "../store/index.js";
 export default {
@@ -69,9 +70,11 @@ export default {
         password: "",
         Authority: "",
       },
+      userToken: ''
     };
   },
   methods: {
+    ...mapMutations(['changeLogin']),
     login: function () {
       // this.$router.push("/home");
       let params = {
@@ -85,12 +88,17 @@ export default {
           this.$root.user.Authority = res.data.Authority;
           console.log(this.$root.user);
           if (res.data.Mark == 1 && res.data.Token != "") {
+            console.log("保存token!");
             //保存token到状态
-            store.commit("changeToken", res.data); ///////提交状态
-            localStorage.setItem("token", res.data.token); //////token保存到localStorage
-            this.$axios.defaults.headers.common["Authority"] =
-              "Bearer " + res.data.token;
+            // store.commit("changeToken", res.data); ///////提交状态
+            // localStorage.setItem("token", res.data.token); //////token保存到localStorage
+            // this.$axios.defaults.headers.common["Authority"] =
+            //   "Bearer " + res.data.token;
 
+          console.log(res.data);
+          this.userToken = 'Bearer ' + res.data.token;
+          // 将用户token保存到vuex中
+          this.changeLogin({ Authorization: this.userToken });
             // alert("登录成功");
             //跳转到首页
             this.$router.push({
