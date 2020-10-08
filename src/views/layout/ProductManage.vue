@@ -1347,41 +1347,58 @@ export default {
     },
     //删除生产信息
     deleteProduct(product) {
-      if (this.activeName == "first") {
-        let params = { orderJson: product };
-        https
-          .fetchGet("Order/delete", params)
-          .then((data) => {
-            this.$notify({
-              title: "提示",
-              message: data.data,
-              duration: this.durationTime,
-            });
-            if (data.data == "删除成功") {
-              this.tableData.splice(this.tableData.indexOf(product), 1); //删除表格信息
-            }
-          })
-          .catch((err) => {
-            console.log(err);
+      this.$confirm("是否确认删除该条数据?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true,
+      })
+        .then(() => {
+          if (this.activeName == "first") {
+            let params = { orderJson: product };
+            https
+              .fetchGet("Order/delete", params)
+              .then((data) => {
+                this.$notify({
+                  title: "提示",
+                  message: data.data,
+                  duration: this.durationTime,
+                });
+                if (data.data == "删除成功") {
+                  this.tableData.splice(this.tableData.indexOf(product), 1); //删除表格信息
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          } else if (this.activeName == "second") {
+            let params = { orderJson: product };
+            https
+              .fetchGet("ZxcOrder/delete", params)
+              .then((data) => {
+                this.$notify({
+                  title: "提示",
+                  message: data.data,
+                  duration: this.durationTime,
+                });
+                if (data.data == "删除成功") {
+                  this.zxcTableData.splice(
+                    this.zxcTableData.indexOf(product),
+                    1
+                  ); //删除表格信息
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
           });
-      } else if (this.activeName == "second") {
-        let params = { orderJson: product };
-        https
-          .fetchGet("ZxcOrder/delete", params)
-          .then((data) => {
-            this.$notify({
-              title: "提示",
-              message: data.data,
-              duration: this.durationTime,
-            });
-            if (data.data == "删除成功") {
-              this.zxcTableData.splice(this.zxcTableData.indexOf(product), 1); //删除表格信息
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
+        });
     },
     //保存生产信息
     SaveProductInfo() {
@@ -1636,7 +1653,7 @@ export default {
         if (this.code.length < 3) return; // 手动输入的时间不会让code的长度大于2，所以这里只会对扫码枪有
         // 获取到扫码枪输入的内容，做别的操作
         let params = { vin: this.code };
-        if (this.code.indexOf("CWX")>=0) {
+        if (this.code.indexOf("CWX") >= 0) {
           console.log("11111");
           https
             .fetchGet("Order/getsingle", params)
@@ -1648,12 +1665,12 @@ export default {
               // });
               this.product = data.data;
               this.dialogFormVisible = true;
-              this.zxcDialogVisible=false;
+              this.zxcDialogVisible = false;
             })
             .catch((err) => {
               console.log(err);
             });
-        }else{
+        } else {
           console.log("22222");
           https
             .fetchGet("ZxcOrder/getsingle", params)
@@ -1665,7 +1682,7 @@ export default {
               // });
               this.zxcproduct = data.data;
               this.dialogFormVisible = false;
-              this.zxcDialogVisible=true;
+              this.zxcDialogVisible = true;
             })
             .catch((err) => {
               console.log(err);
