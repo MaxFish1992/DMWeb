@@ -47,8 +47,8 @@
             <el-form-item label="是否合格" :label-width="formLabelWidth">
               <el-form-item :label="product.Qualified"></el-form-item>
             </el-form-item>
-            <el-form-item label="是否合格" :label-width="formLabelWidth">
-              <el-button type="text" @click="openDrawing()" style>工艺图</el-button>
+            <el-form-item label="" :label-width="0">
+              <el-button type="text" @click="showDrawing()" style>工艺图</el-button>
             </el-form-item>
           </el-form>
         </el-col>
@@ -140,6 +140,18 @@
         </el-col>
       </el-row>
     </el-dialog>
+    <el-dialog title="工艺图" :visible.sync="dialogDrawingVisible">
+      <div>
+        <ol>
+          <ul
+            v-for="(image) in imagenames"
+            :key="image.index"
+            @click="previewDrawing(image.FileName)"
+          >{{ image.FileName }}</ul>
+        </ol>
+        <img :src="imageUrl" />
+      </div>
+    </el-dialog>
   </el-container>
 </template>
 
@@ -202,8 +214,11 @@ export default {
         Mark: "",
       },
       orderDialogVisible: false,
+      dialogDrawingVisible: false,
       activeIndex: "1",
       imgSrc: require("../../assets/images/wxjz.jpg"),
+      imageUrl:"",
+      imagenames: [],
       navList: [
         { name: "/home", navItem: "首页" },
         { name: "/productmanage", navItem: "销售订单" },
@@ -219,7 +234,26 @@ export default {
       console.log(key, keyPath);
     },
     //查看工艺图
-    openDrawing() {},
+    showDrawing() {
+      this.dialogDrawingVisible = true;
+      let params = { vin: this.product.VIN };
+      https
+        .fetchGet("Download/getfilenames", params)
+        .then((data) => {
+          this.imagenames = data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    //预览工艺图
+    previewDrawing(filename) {
+      this.imageUrl =
+        "http://192.168.1.105:8090/Download/getimage?vin=" +
+        this.product.VIN +
+        "&fileName=" +
+        filename;
+    },
   },
   created: function () {
     window.document.onkeypress = (e) => {

@@ -12,7 +12,11 @@
           active-text-color="#ffd04b"
           @select="handleSelect"
         >
-          <el-menu-item v-for="(item,i) in navList" :key="i" :index="item.name">{{ item.navItem }}</el-menu-item>
+          <el-menu-item
+            v-for="(item,i) in navList"
+            :key="i"
+            :index="item.name"
+          >{{ item.navItem }}</el-menu-item>
         </el-menu>
       </el-aside>
 
@@ -27,22 +31,60 @@
           <el-button type="text" @click="addSale()">新增</el-button>
           <el-button type="text" @click="exitSystem()">退出</el-button>
         </el-header>
-        <el-table :data="tableData" style="width: 100%;" max-height="855">
-          <el-table-column fixed prop="SignDate" label="日期" width="150"></el-table-column>
-          <el-table-column prop="ContractNum" label="合同号" width="120"></el-table-column>
-          <el-table-column prop="VIN" label="VIN" width="120"></el-table-column>
-          <el-table-column prop="CustomerName" label="客户名称" width="150"></el-table-column>
-          <el-table-column prop="CustomerPhone" label="客户联系方式" width="180"></el-table-column>
-          <el-table-column prop="DeliveryDate" label="交货期" width="120"></el-table-column>
-          <el-table-column prop="IsCompletion" label="完成情况" width="120"></el-table-column>
-          <el-table-column fixed="right" label="操作" width="150">
-            <template slot-scope="scope">
-              <el-button @click="showSale(scope.row)" type="text" size="small">查看</el-button>
-              <el-button @click="editSale(scope.row)" type="text" size="small">编辑</el-button>
-              <el-button @click.native.prevent="deleteSale(scope.row)" type="text" size="small">移除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+          <el-tab-pane label="自卸半挂" name="first">
+            <el-table :data="tableData" style="width: 100%;" max-height="855">
+              <el-table-column prop="ContractNum" label="合同号" width="120"></el-table-column>
+              <el-table-column prop="VIN" label="VIN" width="120"></el-table-column>
+              <el-table-column prop label="下料" width="150"></el-table-column>
+              <el-table-column prop label="底板" width="180"></el-table-column>
+              <el-table-column prop label="边板" width="120"></el-table-column>
+              <el-table-column prop label="前挡" width="120"></el-table-column>
+              <el-table-column prop label="后门" width="120"></el-table-column>
+              <el-table-column prop label="合厢" width="120"></el-table-column>
+              <el-table-column prop label="装厢" width="120"></el-table-column>
+              <el-table-column prop label="大梁" width="120"></el-table-column>
+              <el-table-column prop label="装桥" width="120"></el-table-column>
+              <el-table-column prop label="喷漆" width="120"></el-table-column>
+              <el-table-column fixed="right" label="操作" width="150">
+                <template slot-scope="scope">
+                  <el-button @click="showSale(scope.row)" type="text" size="small">查看</el-button>
+                  <el-button @click="editSale(scope.row)" type="text" size="small">编辑</el-button>
+                  <el-button
+                    @click.native.prevent="deleteSale(scope.row)"
+                    type="text"
+                    size="small"
+                  >移除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-tab-pane>
+          <el-tab-pane label="自卸车" name="second">
+            <el-table :data="tableData" style="width: 100%;" max-height="855">
+              <el-table-column prop="ContractNum" label="合同号" width="120"></el-table-column>
+              <el-table-column prop="VIN" label="底盘号" width="120"></el-table-column>
+              <el-table-column prop label="下料" width="150"></el-table-column>
+              <el-table-column prop label="底板" width="180"></el-table-column>
+              <el-table-column prop label="边板" width="120"></el-table-column>
+              <el-table-column prop label="前挡" width="120"></el-table-column>
+              <el-table-column prop label="后门" width="120"></el-table-column>
+              <el-table-column prop label="合厢" width="120"></el-table-column>
+              <el-table-column prop label="装厢" width="120"></el-table-column>
+              <el-table-column prop label="喷漆" width="120"></el-table-column>
+              <el-table-column fixed="right" label="操作" width="150">
+                <template slot-scope="scope">
+                  <el-button @click="showSale(scope.row)" type="text" size="small">查看</el-button>
+                  <el-button @click="editSale(scope.row)" type="text" size="small">编辑</el-button>
+                  <el-button
+                    @click.native.prevent="deleteSale(scope.row)"
+                    type="text"
+                    size="small"
+                  >移除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-tab-pane>
+        </el-tabs>
       </el-container>
       <el-dialog title="销售信息" :visible.sync="dialogFormVisible" customClass="customWidth">
         <el-form :model="currentSale">
@@ -136,6 +178,7 @@ export default {
         // { name: "/procurementmanage", navItem: "进销存管理" },
         { name: "/about", navItem: "关于" },
       ],
+      activeName: "first",
       tableData: [],
       currentSale: {
         SignDate: "",

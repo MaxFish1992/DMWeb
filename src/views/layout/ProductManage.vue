@@ -1,8 +1,10 @@
 <template>
   <el-container>
-    <el-header style="text-align: center; font-size: 26px">智能化生产管理系统</el-header>
+    <el-header style="text-align: center; font-size: 26px"
+      >智能化生产管理系统</el-header
+    >
     <el-container style="height: 100%; border: 1px solid #eee">
-      <el-aside width="200px" style="background-color: rgb(84,92,100);">
+      <el-aside width="200px" style="background-color: rgb(84, 92, 100)">
         <el-menu
           :default-openeds="['1', '1']"
           :router="true"
@@ -12,67 +14,252 @@
           active-text-color="#ffd04b"
           @select="handleSelect"
         >
-          <el-menu-item v-for="(item,i) in navList" :key="i" :index="item.name">{{ item.navItem }}</el-menu-item>
+          <el-menu-item
+            v-for="(item, i) in navList"
+            :key="i"
+            :index="item.name"
+            >{{ item.navItem }}</el-menu-item
+          >
         </el-menu>
       </el-aside>
-
       <el-container>
         <el-header style="text-align: right; font-size: 16px">
           <el-input
             v-model="searchProduct"
             size="mini"
             placeholder="输入关键字搜索"
-            style="width:200px;margin-right:20px;"
+            style="width: 200px; margin-right: 20px"
           />
           <el-button type="text" @click="addProduct()">新增</el-button>
           <el-button type="text" @click="exitSystem()">退出</el-button>
         </el-header>
-        <el-table :data="filterData" style="width: 100%;" max-height="855">
-          <el-table-column fixed prop="OrderDate" label="日期" width="150"></el-table-column>
-          <el-table-column prop="ProductNumber" label="合同号" width="120"></el-table-column>
-          <el-table-column prop="VIN" label="VIN" width="120"></el-table-column>
-          <el-table-column prop="CustomerName" label="客户名称" width="120"></el-table-column>
-          <el-table-column prop="CustomerPhone" label="客户联系方式" width="150"></el-table-column>
-          <el-table-column prop="Drawing" label="图纸" width="120"></el-table-column>
-          <el-table-column prop="Blanking" label="下料" width="120"></el-table-column>
-          <!-- <el-table-column prop="SideBoard" label="边板" width="120"></el-table-column>
+        <el-tabs v-model="activeName">
+          <el-tab-pane label="自卸半挂" name="first">
+            <el-table
+              :data="bgcFilterData"
+              style="width: 100%"
+              max-height="855"
+            >
+              <el-table-column
+                fixed
+                prop="OrderDate"
+                label="日期"
+                width="150"
+              ></el-table-column>
+              <el-table-column
+                prop="ProductNumber"
+                label="合同号"
+                width="120"
+              ></el-table-column>
+              <el-table-column
+                prop="VIN"
+                label="VIN"
+                width="120"
+              ></el-table-column>
+              <el-table-column
+                prop="CustomerName"
+                label="客户名称"
+                width="120"
+              ></el-table-column>
+              <el-table-column
+                prop="CustomerPhone"
+                label="客户联系方式"
+                width="150"
+              ></el-table-column>
+              <el-table-column
+                prop="Drawing"
+                label="图纸"
+                width="120"
+              ></el-table-column>
+              <el-table-column
+                prop="Blanking"
+                label="下料"
+                width="120"
+              ></el-table-column>
+              <!-- <el-table-column prop="SideBoard" label="边板" width="120"></el-table-column>
           <el-table-column prop="Floor" label="底板" width="120"></el-table-column>
           <el-table-column prop="FrontDoor" label="前档" width="120"></el-table-column>
-          <el-table-column prop="BackDoor" label="后门" width="120"></el-table-column>-->
-          <el-table-column prop="CloseCompartment" label="合厢" width="120"></el-table-column>
-          <!-- <el-table-column prop="FinalAssembly" label="总装" width="120"></el-table-column> -->
-          <el-table-column prop="Qualified" label="是否合格" width="120"></el-table-column>
-          <el-table-column prop="LeaveFactory" label="是否出厂" width="120"></el-table-column>
-          <el-table-column prop="SprayPaint" label="工艺图" width="120">
-            <template slot-scope="scope">
-              <el-button @click="uploadDrawing(scope.row)" type="text" size="small">上传</el-button>
-              <el-button @click="showDrawing(scope.row)" type="text" size="small">查看</el-button>
-            </template>
-          </el-table-column>
-          <el-table-column fixed="right" label="操作" width="150">
-            <template slot-scope="scope">
-              <el-button @click="showProduct(scope.row)" type="text" size="small">查看</el-button>
-              <el-button type="text" size="small" @click="editProduct(scope.row)">编辑</el-button>
-              <el-button
-                @click.native.prevent="deleteProduct(scope.row)"
-                type="text"
-                size="small"
-              >移除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+              <el-table-column prop="BackDoor" label="后门" width="120"></el-table-column>-->
+              <el-table-column
+                prop="CloseCompartment"
+                label="合厢"
+                width="120"
+              ></el-table-column>
+              <!-- <el-table-column prop="FinalAssembly" label="总装" width="120"></el-table-column> -->
+              <el-table-column
+                prop="Qualified"
+                label="是否合格"
+                width="120"
+              ></el-table-column>
+              <el-table-column
+                prop="LeaveFactory"
+                label="是否出厂"
+                width="120"
+              ></el-table-column>
+              <el-table-column prop="SprayPaint" label="工艺图" width="120">
+                <template slot-scope="scope">
+                  <el-button
+                    @click="uploadDrawing(scope.row)"
+                    type="text"
+                    size="small"
+                    >上传</el-button
+                  >
+                  <el-button
+                    @click="showDrawing(scope.row)"
+                    type="text"
+                    size="small"
+                    >查看</el-button
+                  >
+                </template>
+              </el-table-column>
+              <el-table-column fixed="right" label="操作" width="150">
+                <template slot-scope="scope">
+                  <el-button
+                    @click="showProduct(scope.row)"
+                    type="text"
+                    size="small"
+                    >查看</el-button
+                  >
+                  <el-button
+                    type="text"
+                    size="small"
+                    @click="editProduct(scope.row)"
+                    >编辑</el-button
+                  >
+                  <el-button
+                    @click.native.prevent="deleteProduct(scope.row)"
+                    type="text"
+                    size="small"
+                    >移除</el-button
+                  >
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-tab-pane>
+          <el-tab-pane label="自卸车" name="second">
+            <el-table
+              :data="zxcFilterData"
+              style="width: 100%"
+              max-height="855"
+            >
+              <el-table-column
+                fixed
+                prop="ProductDate"
+                label="日期"
+                width="120"
+              ></el-table-column>
+              <el-table-column
+                prop="ProductNumber"
+                label="合同号"
+                width="100"
+              ></el-table-column>
+              <el-table-column
+                prop="FloorType"
+                label="底盘型号"
+                width="100"
+              ></el-table-column>
+              <el-table-column
+                prop="FloorNumber"
+                label="底盘号"
+                width="120"
+              ></el-table-column>
+              <el-table-column
+                prop="CustomerName"
+                label="客户名称"
+                width="120"
+              ></el-table-column>
+              <!-- <el-table-column prop="CustomerPhone" label="客户联系方式" width="150"></el-table-column> -->
+              <!-- <el-table-column prop="Drawing" label="货厢规格" width="200"></el-table-column> -->
+              <!-- <el-table-column
+                prop=""
+                label="货厢规格"
+                width="200"
+              ></el-table-column> -->
+              <!-- <el-table-column prop="SideBoard" label="边板" width="120"></el-table-column>
+          <el-table-column prop="Floor" label="底板" width="120"></el-table-column>
+          <el-table-column prop="FrontDoor" label="前档" width="120"></el-table-column>
+              <el-table-column prop="BackDoor" label="后门" width="120"></el-table-column>-->
+              <!-- <el-table-column prop="FinalAssembly" label="总装" width="120"></el-table-column> -->
+              <!-- <el-table-column
+                prop=""
+                label="货厢类型"
+                width="120"
+              ></el-table-column> -->
+              <el-table-column
+                prop="OilCylinder"
+                label="举升缸"
+                width="120"
+              ></el-table-column>
+              <!-- <el-table-column prop="LeaveFactory" label="底板厚度" width="80"></el-table-column>
+              <el-table-column prop="LeaveFactory" label="边板厚度" width="80"></el-table-column>
+              <el-table-column prop="LeaveFactory" label="前挡厚度" width="80"></el-table-column>
+              <el-table-column prop="LeaveFactory" label="后门厚度" width="80"></el-table-column>-->
+              <el-table-column
+                prop="CarlingNumber"
+                label="纵梁数"
+                width="80"
+              ></el-table-column>
+              <el-table-column prop label="工艺图" width="120">
+                <template slot-scope="scope">
+                  <el-button
+                    @click="uploadDrawing1(scope.row)"
+                    type="text"
+                    size="small"
+                    >上传</el-button
+                  >
+                  <el-button
+                    @click="showDrawing1(scope.row)"
+                    type="text"
+                    size="small"
+                    >查看</el-button
+                  >
+                </template>
+              </el-table-column>
+              <el-table-column fixed="right" label="操作" width="150">
+                <template slot-scope="scope">
+                  <el-button
+                    @click="showProduct(scope.row)"
+                    type="text"
+                    size="small"
+                    >查看</el-button
+                  >
+                  <el-button
+                    type="text"
+                    size="small"
+                    @click="editProduct(scope.row)"
+                    >编辑</el-button
+                  >
+                  <el-button
+                    @click.native.prevent="deleteProduct(scope.row)"
+                    type="text"
+                    size="small"
+                    >移除</el-button
+                  >
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-tab-pane>
+        </el-tabs>
       </el-container>
     </el-container>
-    <el-dialog title="生产信息" :visible.sync="dialogFormVisible" customClass="customWidth">
+    <el-dialog
+      title="半挂车订单信息"
+      :visible.sync="dialogFormVisible"
+      customClass="customWidth"
+    >
       <el-row>
         <el-col :span="8">
           <el-form :model="product">
             <el-form-item label="生产日期" :label-width="formLabelWidth">
-              <el-input v-model="product.OrderDate" auto-complete="off" :readonly="dialogReadonly"></el-input>
+              <el-input
+                v-model="product.OrderDate"
+                auto-complete="off"
+                :readonly="dialogReadonly"
+              ></el-input>
             </el-form-item>
             <el-form-item label="交货期" :label-width="formLabelWidth">
               <el-date-picker
-                style="width:250px;"
+                style="width: 250px"
                 v-model="product.DeliveryDate"
                 align="right"
                 type="date"
@@ -95,7 +282,11 @@
               ></el-input>
             </el-form-item>
             <el-form-item label="VIN" :label-width="formLabelWidth">
-              <el-input v-model="product.VIN" auto-complete="off" :readonly="dialogReadonly"></el-input>
+              <el-input
+                v-model="product.VIN"
+                auto-complete="off"
+                :readonly="dialogReadonly"
+              ></el-input>
             </el-form-item>
             <el-form-item label="客户名称" :label-width="formLabelWidth">
               <el-input
@@ -112,10 +303,24 @@
               ></el-input>
             </el-form-item>
             <el-form-item label="图纸" :label-width="formLabelWidth">
-              <el-input v-model="product.Drawing" auto-complete="off" :readonly="dialogReadonly"></el-input>
+              <!-- <el-input v-model="product.Drawing" auto-complete="off" :readonly="dialogReadonly"></el-input> -->
+              <el-button
+                @click="uploadDrawing2()"
+                type="text"
+                size="small"
+                :disabled="dialogReadonly"
+                >上传</el-button
+              >
+              <el-button @click="showDrawing2()" type="text" size="small"
+                >查看</el-button
+              >
             </el-form-item>
             <el-form-item label="下料" :label-width="formLabelWidth">
-              <el-input v-model="product.Blanking" auto-complete="off" :readonly="dialogReadonly"></el-input>
+              <el-input
+                v-model="product.Blanking"
+                auto-complete="off"
+                :readonly="dialogReadonly"
+              ></el-input>
             </el-form-item>
             <el-form-item label="合厢" :label-width="formLabelWidth">
               <el-input
@@ -132,7 +337,11 @@
               ></el-input>
             </el-form-item>
             <el-form-item label="是否合格" :label-width="formLabelWidth">
-              <el-input v-model="product.Qualified" auto-complete="off" :readonly="dialogReadonly"></el-input>
+              <el-input
+                v-model="product.Qualified"
+                auto-complete="off"
+                :readonly="dialogReadonly"
+              ></el-input>
             </el-form-item>
           </el-form>
         </el-col>
@@ -141,13 +350,25 @@
             <el-collapse-item title="产品规格">
               <el-form>
                 <el-form-item label="长" :label-width="formLabelWidth">
-                  <el-input v-model="product.Length" auto-complete="off" :readonly="dialogReadonly"></el-input>
+                  <el-input
+                    v-model="product.Length"
+                    auto-complete="off"
+                    :readonly="dialogReadonly"
+                  ></el-input>
                 </el-form-item>
                 <el-form-item label="宽" :label-width="formLabelWidth">
-                  <el-input v-model="product.Width" auto-complete="off" :readonly="dialogReadonly"></el-input>
+                  <el-input
+                    v-model="product.Width"
+                    auto-complete="off"
+                    :readonly="dialogReadonly"
+                  ></el-input>
                 </el-form-item>
                 <el-form-item label="高" :label-width="formLabelWidth">
-                  <el-input v-model="product.Height" auto-complete="off" :readonly="dialogReadonly"></el-input>
+                  <el-input
+                    v-model="product.Height"
+                    auto-complete="off"
+                    :readonly="dialogReadonly"
+                  ></el-input>
                 </el-form-item>
               </el-form>
             </el-collapse-item>
@@ -157,7 +378,7 @@
                   <el-col :span="12">
                     <el-form-item label="厚度">
                       <el-input
-                        style="width:180px;"
+                        style="width: 180px"
                         v-model="product.SideBoardThickness"
                         auto-complete="off"
                         :readonly="dialogReadonly"
@@ -169,7 +390,7 @@
                       <el-select
                         v-model="product.SideBoardMaterial"
                         placeholder="请选择"
-                        style="width:200px;"
+                        style="width: 200px"
                       >
                         <el-option
                           v-for="item in sideboardTypes"
@@ -189,7 +410,7 @@
                   <el-col :span="12">
                     <el-form-item label="厚度">
                       <el-input
-                        style="width:180px;"
+                        style="width: 180px"
                         v-model="product.FloorThickness"
                         auto-complete="off"
                         :readonly="dialogReadonly"
@@ -201,7 +422,7 @@
                       <el-select
                         v-model="product.FloorMaterial"
                         placeholder="请选择"
-                        style="width:200px;"
+                        style="width: 200px"
                       >
                         <el-option
                           v-for="item in sideboardTypes"
@@ -246,7 +467,7 @@
                   <el-col :span="12">
                     <el-form-item label="个数">
                       <el-input
-                        style="width:180px;"
+                        style="width: 180px"
                         v-model="product.SteelRingNum"
                         auto-complete="off"
                         :readonly="dialogReadonly"
@@ -258,7 +479,7 @@
                       <el-select
                         v-model="product.SteelRingMaterial"
                         placeholder="请选择"
-                        style="width:200px;"
+                        style="width: 200px"
                       >
                         <el-option
                           v-for="item in steelRingTypes"
@@ -303,7 +524,7 @@
                   <el-col :span="12">
                     <el-form-item label="品牌">
                       <el-input
-                        style="width:180px;"
+                        style="width: 180px"
                         v-model="product.HydraulicBrand"
                         auto-complete="off"
                         :readonly="dialogReadonly"
@@ -313,7 +534,7 @@
                   <el-col :span="12">
                     <el-form-item label="型号">
                       <el-input
-                        style="width:180px;"
+                        style="width: 180px"
                         v-model="product.HydraulicModel"
                         auto-complete="off"
                         :readonly="dialogReadonly"
@@ -326,9 +547,13 @@
           </el-collapse>
           <el-row>
             <el-col :span="10">
-              <el-form style="margin-top:20px;">
+              <el-form style="margin-top: 20px">
                 <el-form-item label="车桥" :label-width="formLabelWidth">
-                  <el-select v-model="product.Axle" placeholder="请选择" style="width:180px;">
+                  <el-select
+                    v-model="product.Axle"
+                    placeholder="请选择"
+                    style="width: 180px"
+                  >
                     <el-option
                       v-for="item in axleTypes"
                       :key="item.value"
@@ -341,7 +566,7 @@
                   <el-select
                     v-model="product.HasAirSuspension"
                     placeholder="请选择"
-                    style="width:180px;"
+                    style="width: 180px"
                   >
                     <el-option
                       v-for="item in hasOrNot"
@@ -355,7 +580,7 @@
                   <el-select
                     v-model="product.HasAdjustingArm"
                     placeholder="请选择"
-                    style="width:180px;"
+                    style="width: 180px"
                   >
                     <el-option
                       v-for="item in hasOrNot"
@@ -366,7 +591,11 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="ABS" :label-width="formLabelWidth">
-                  <el-select v-model="product.ABS" placeholder="请选择" style="width:180px;">
+                  <el-select
+                    v-model="product.ABS"
+                    placeholder="请选择"
+                    style="width: 180px"
+                  >
                     <el-option
                       v-for="item in absTypes"
                       :key="item.value"
@@ -378,10 +607,10 @@
               </el-form>
             </el-col>
             <el-col :span="12">
-              <el-form style="margin-top:20px;margin-left:100px;">
+              <el-form style="margin-top: 20px; margin-left: 100px">
                 <el-form-item label="后门">
                   <el-input
-                    style="width:120px;"
+                    style="width: 120px"
                     v-model="product.BackDoorType"
                     auto-complete="off"
                     :readonly="dialogReadonly"
@@ -389,7 +618,7 @@
                 </el-form-item>
                 <el-form-item label="喷涂">
                   <el-input
-                    style="width:120px;"
+                    style="width: 120px"
                     v-model="product.CarriageColor"
                     auto-complete="off"
                     :readonly="dialogReadonly"
@@ -400,19 +629,265 @@
           </el-row>
         </el-col>
         <el-col :span="8">
-          <el-form style="margin-top:0px;margin-left:30px;">
+          <el-form style="margin-top: 0px; margin-left: 30px">
             <el-form-item>
-              <el-card class="box-card" style="width:480px;">
-                <div style="padding: 0px;margin-top:0px;">
+              <el-card class="box-card" style="width: 480px">
+                <div style="padding: 0px; margin-top: 0px">
                   <span>其它配置</span>
                 </div>
-                <el-input type="textarea" :rows="24" placeholder="请输入内容" v-model="product.Mark"></el-input>
+                <el-input
+                  type="textarea"
+                  :rows="24"
+                  placeholder="请输入内容"
+                  v-model="product.Mark"
+                ></el-input>
               </el-card>
             </el-form-item>
           </el-form>
         </el-col>
       </el-row>
       <div id="qrcode" class="qrcode" ref="qrCodeUrl"></div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="SaveProductInfo()">确 定</el-button>
+        <el-button type="primary" @click="CreateQRCode()">生成二维码</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog
+      title="自卸车订单信息"
+      :visible.sync="zxcDialogVisible"
+      customClass="customWidth"
+    >
+      <el-row>
+        <el-col :span="8">
+          <el-form :model="zxcproduct">
+            <el-form-item label="生产日期" :label-width="formLabelWidth">
+              <el-input
+                v-model="zxcproduct.ProductDate"
+                auto-complete="off"
+                :readonly="dialogReadonly"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="交货期" :label-width="formLabelWidth">
+              <el-date-picker
+                style="width: 250px"
+                v-model="zxcproduct.DeliveryDate"
+                align="right"
+                type="date"
+                format="yyyy 年 MM 月 dd 日"
+                value-format="yyyy年MM月dd 日"
+                placeholder="选择日期"
+                :picker-options="pickerOptions"
+              ></el-date-picker>
+            </el-form-item>
+            <el-form-item
+              label="合同号"
+              :label-width="formLabelWidth"
+              auto-complete="off"
+              :readonly="dialogReadonly"
+            >
+              <el-input
+                v-model="zxcproduct.ProductNumber"
+                auto-complete="off"
+                :readonly="dialogReadonly"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="底板型号" :label-width="formLabelWidth">
+              <el-input
+                v-model="zxcproduct.FloorType"
+                auto-complete="off"
+                :readonly="dialogReadonly"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="底盘号" :label-width="formLabelWidth">
+              <el-input
+                v-model="zxcproduct.FloorNumber"
+                auto-complete="off"
+                :readonly="dialogReadonly"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="客户名称" :label-width="formLabelWidth">
+              <el-input
+                v-model="zxcproduct.CustomerName"
+                auto-complete="off"
+                :readonly="dialogReadonly"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="客户联系方式" :label-width="formLabelWidth">
+              <el-input
+                v-model="zxcproduct.CustomerPhone"
+                auto-complete="off"
+                :readonly="dialogReadonly"
+              ></el-input>
+            </el-form-item>
+
+            <!-- <el-form-item label="下料" :label-width="formLabelWidth">
+              <el-input v-model="product.Blanking" auto-complete="off" :readonly="dialogReadonly"></el-input>
+            </el-form-item>-->
+            <!-- <el-form-item label="合厢" :label-width="formLabelWidth">
+              <el-input
+                v-model="product.CloseCompartment"
+                auto-complete="off"
+                :readonly="dialogReadonly"
+              ></el-input>
+            </el-form-item>-->
+            <el-form-item label="是否出厂" :label-width="formLabelWidth">
+              <el-input
+                v-model="zxcproduct.LeaveFactory"
+                auto-complete="off"
+                :readonly="dialogReadonly"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="是否合格" :label-width="formLabelWidth">
+              <el-input
+                v-model="zxcproduct.Qualified"
+                auto-complete="off"
+                :readonly="dialogReadonly"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="图纸" :label-width="formLabelWidth">
+              <el-button
+                @click="uploadDrawing2()"
+                type="text"
+                size="small"
+                :disabled="dialogReadonly"
+                >上传</el-button
+              >
+              <el-button @click="showDrawing2()" type="text" size="small"
+                >查看</el-button
+              >
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-col :span="8">
+          <el-collapse accordion v-model="activeCollapseItem">
+            <el-collapse-item title="货厢规格" name="1">
+              <el-form>
+                <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="长">
+                      <el-input
+                        style="width: 150px"
+                        v-model="zxcproduct.Length"
+                        auto-complete="off"
+                        :readonly="dialogReadonly"
+                      ></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="宽">
+                      <el-input
+                        style="width: 150px"
+                        v-model="zxcproduct.Width"
+                        auto-complete="off"
+                        :readonly="dialogReadonly"
+                      ></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="高">
+                      <el-input
+                        style="width: 150px"
+                        v-model="zxcproduct.Height"
+                        auto-complete="off"
+                        :readonly="dialogReadonly"
+                      ></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
+            </el-collapse-item>
+            <el-collapse-item title="板厚要求" name="1">
+              <el-form>
+                <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="底板">
+                      <el-input
+                        style="width: 150px"
+                        v-model="zxcproduct.FloorThickness"
+                        auto-complete="off"
+                        :readonly="dialogReadonly"
+                      ></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="边板">
+                      <el-input
+                        style="width: 150px"
+                        v-model="zxcproduct.SideBoardThickness"
+                        auto-complete="off"
+                        :readonly="dialogReadonly"
+                      ></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="前挡">
+                      <el-input
+                        style="width: 150px"
+                        v-model="zxcproduct.FrontboardThickness"
+                        auto-complete="off"
+                        :readonly="dialogReadonly"
+                      ></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="后门">
+                      <el-input
+                        style="width: 150px"
+                        v-model="zxcproduct.BackboardThickness"
+                        auto-complete="off"
+                        :readonly="dialogReadonly"
+                      ></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
+            </el-collapse-item>
+          </el-collapse>
+          <el-form>
+            <el-form-item
+              label="材质类型"
+              :label-width="formLabelWidth"
+              style="margin-top: 20px"
+            >
+              <el-input
+                v-model="zxcproduct.Material"
+                auto-complete="off"
+                :readonly="dialogReadonly"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="纵梁数" :label-width="formLabelWidth">
+              <el-input
+                v-model="zxcproduct.CarlingNumber"
+                auto-complete="off"
+                :readonly="dialogReadonly"
+              ></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-col :span="8">
+          <el-form style="margin-top: 0px; margin-left: 30px">
+            <el-form-item>
+              <el-card class="box-card" style="width: 480px">
+                <div style="padding: 0px; margin-top: 0px">
+                  <span>特别约定</span>
+                </div>
+                <el-input
+                  type="textarea"
+                  :rows="24"
+                  placeholder="请输入内容"
+                  v-model="zxcproduct.Mark"
+                ></el-input>
+              </el-card>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
+      <div id="qrcode1" class="qrcode1" ref="qrCodeUrl1"></div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="SaveProductInfo()">确 定</el-button>
@@ -433,17 +908,23 @@
       >
         <el-button size="small" type="primary">选择图片</el-button>
         <!-- <el-button size="small" type="primary" @click="newSubmitForm()" class="yes-btn">确 定</el-button> -->
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+        <div slot="tip" class="el-upload__tip">
+          只能上传jpg/png文件，且不超过500kb
+        </div>
       </el-upload>
     </el-dialog>
     <el-dialog title="工艺图" :visible.sync="dialogDrawingVisible">
       <div>
         <ol>
           <ul
-            v-for="(image) in imagenames"
+            v-for="image in imagenames"
             :key="image.index"
             @click="previewDrawing(image.FileName)"
-          >{{ image.FileName }}</ul>
+          >
+            {{
+              image.FileName
+            }}
+          </ul>
         </ol>
         <img :src="imageUrl" />
       </div>
@@ -478,13 +959,9 @@
 }
 .qrcode {
   display: inline-block;
-  /* img {
-        width: 132px;
-        height:132px;
-        background-color:#fff;
-        padding:6px; 
-        box-sizing:border-box;
-    } */
+}
+.qrcode1 {
+  display: inline-block;
 }
 </style>
 
@@ -497,7 +974,7 @@ import axios from "axios";
 export function startUpload(data) {
   return axios({
     method: "post",
-    url: "http://localhost:50792/Upload",
+    url: "http://192.168.1.105:8090/Upload",
     timeout: 20000,
     data: data,
     dataType: "json",
@@ -512,10 +989,13 @@ export default {
       dialogPictureVisible: false,
       dialogDrawingVisible: false,
       dialogFormVisible: false,
+      zxcDialogVisible: false,
       dialogReadonly: false,
       operationType: "1", // 操作类型,添加、编辑、查看
       activeIndex: "1",
       iconVal: "",
+      activeName: "first",
+      activeCollapseItem: "1",
       imageList: [],
       imagenames: [],
       imageUrl: "",
@@ -618,6 +1098,7 @@ export default {
         ],
       },
       tableData: [],
+      zxcTableData: [],
       product: {
         OrderDate: "",
         DeliveryDate: "",
@@ -655,34 +1136,80 @@ export default {
         CarriageColor: "",
         Mark: "",
       },
+      zxcproduct: {
+        ProductDate: "",
+        DeliveryDate: "",
+        ProductNumber: "",
+        FloorType: "",
+        FloorNumber: "",
+        CustomerName: "",
+        CustomerPhone: "",
+        LeaveFactory: "",
+        Qualified: "",
+        Length: "",
+        Width: "",
+        Height: "",
+        FloorThickness: "",
+        SideboardThickness: "",
+        FrontboardThickness: "",
+        BackboardThickness: "",
+        Material: "",
+        CarlingNumber: "",
+        OilCylinder: "",
+        Mark: "",
+      },
       qrcode: {},
+      qrcode1: {},
       searchProduct: "",
-      durationTime: 2000,
+      durationTime: 1500,
     };
   },
   methods: {
     handleSelect() {},
     beforeUpload() {
-      let fd = new FormData();
-      fd.append("vin", this.product.VIN);
+      if (this.activeName == "first") {
+        let fd = new FormData();
+        let params = { vin: this.product.VIN };
+        fd.append("vin", this.product.VIN);
 
-      let params = { vin: this.product.VIN };
-      https
-        .fetchGet("Upload/setvin", params)
-        .then((data) => {
-          this.$notify({
-            title: "提示",
-            message: data.data,
-            duration: this.durationTime,
+        https
+          .fetchGet("Upload/setvin", params)
+          .then((data) => {
+            this.$notify({
+              title: "提示",
+              message: data.data,
+              duration: this.durationTime,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
           });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
 
-      startUpload(fd).then((res) => {
-        console.log(res);
-      });
+        startUpload(fd).then((res) => {
+          console.log(res);
+        });
+      } else if (this.activeName == "second") {
+        console.log("vin:" + this.zxcproduct.FloorNumber);
+        let fd = new FormData();
+        let params = { vin: this.zxcproduct.FloorNumber };
+        fd.append("vin", this.zxcproduct.FloorNumber);
+        https
+          .fetchGet("Upload/setvin", params)
+          .then((data) => {
+            this.$notify({
+              title: "提示",
+              message: data.data,
+              duration: this.durationTime,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
+        startUpload(fd).then((res) => {
+          console.log(res);
+        });
+      }
 
       return true;
     },
@@ -690,11 +1217,52 @@ export default {
       this.$refs.newupload.submit();
     },
     //上传工艺图
+    uploadDrawing2() {
+      this.dialogPictureVisible = true;
+    },
+    uploadDrawing1(product) {
+      console.log("product:" + product);
+      this.dialogPictureVisible = true;
+      this.zxcproduct = product;
+    },
     uploadDrawing(product) {
+      console.log("product:" + product);
       this.dialogPictureVisible = true;
       this.product = product;
     },
     //查看工艺图
+    showDrawing2() {
+      this.dialogDrawingVisible = true;
+      let params = {};
+      if (this.activeName == "first") {
+        console.log(this.zxcproduct.VIN);
+        params = { vin: this.product.VIN };
+      } else if (this.activeName == "second") {
+        console.log(this.zxcproduct.FloorNumber);
+        params = { vin: this.zxcproduct.FloorNumber };
+      }
+      https
+        .fetchGet("Download/getfilenames", params)
+        .then((data) => {
+          this.imagenames = data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    showDrawing1(product) {
+      this.dialogDrawingVisible = true;
+      this.zxcproduct = product;
+      let params = { vin: this.zxcproduct.FloorNumber };
+      https
+        .fetchGet("Download/getfilenames", params)
+        .then((data) => {
+          this.imagenames = data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     showDrawing(product) {
       this.dialogDrawingVisible = true;
       this.product = product;
@@ -710,39 +1278,43 @@ export default {
     },
     //预览工艺图
     previewDrawing(filename) {
-      this.imageUrl =
-        "http://192.168.1.105:8090/Download/getimage?vin=" +
-        this.product.VIN +
-        "&fileName=" +
-        filename;
-      // console.log(filename);
-      // let params = { vin: this.product.VIN, fileName: filename };
-      // https
-      //   .fetchGet("Download/getimage", params)
-      //   .then((data) => {
-      //     // this.imageUrl = data.data;
-      //     //这里就是将得到的图片流转换成blob类型
-      //     const blob = new Blob([data.data], {
-      //       type: "application/png;charset=utf-8",
-      //     });
-      //     const url = window.URL.createObjectURL(blob);
-      //     this.imageUrl = url;
-      //     console.log("imageUrl:" + this.imageUrl);
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
+      if (this.activeName == "first") {
+        this.imageUrl =
+          "http://192.168.1.105:8090/Download/getimage?vin=" +
+          this.product.VIN +
+          "&fileName=" +
+          filename;
+      } else if (this.activeName == "second") {
+        this.imageUrl =
+          "http://192.168.1.105:8090/Download/getimage?vin=" +
+          this.zxcproduct.FloorNumber +
+          "&fileName=" +
+          filename;
+      }
     },
     //查看生产信息
     showProduct(product) {
-      this.dialogFormVisible = true;
+      if (this.activeName == "first") {
+        this.dialogFormVisible = true;
+        this.zxcDialogVisible = false;
+        this.product = product;
+      } else if (this.activeName == "second") {
+        this.dialogFormVisible = false;
+        this.zxcDialogVisible = true;
+        this.zxcproduct = product;
+      }
       this.dialogReadonly = true;
-      this.product = product;
       this.operationType = "1";
     },
     //添加生产信息
     addProduct() {
-      this.dialogFormVisible = true;
+      if (this.activeName == "first") {
+        this.dialogFormVisible = true;
+        this.zxcDialogVisible = false;
+      } else if (this.activeName == "second") {
+        this.dialogFormVisible = false;
+        this.zxcDialogVisible = true;
+      }
       this.dialogReadonly = false;
       this.product = {};
 
@@ -753,87 +1325,167 @@ export default {
         date: nowDate.getDate(),
       };
       console.log(date);
-      let systemDate = date.year + "-" + 0 + date.month + "-" + date.date;
+      let systemDate = date.year + "-" + date.month + "-" + date.date;
       this.product.OrderDate = systemDate;
+      this.zxcproduct.ProductDate = systemDate;
 
       this.operationType = "2";
     },
     //编辑生产信息
     editProduct(product) {
-      this.dialogFormVisible = true;
+      if (this.activeName == "first") {
+        this.dialogFormVisible = true;
+        this.zxcDialogVisible = false;
+        this.product = product;
+      } else if (this.activeName == "second") {
+        this.dialogFormVisible = false;
+        this.zxcDialogVisible = true;
+        this.zxcproduct = product;
+      }
       this.dialogReadonly = false;
-      this.product = product;
       this.operationType = "3";
     },
     //删除生产信息
     deleteProduct(product) {
-      let params = { orderJson: product };
-      https
-        .fetchGet("Order/delete", params)
-        .then((data) => {
-          this.$notify({
-            title: "提示",
-            message: data.data,
-            duration: this.durationTime,
-          });
-          if (data.data == "删除成功") {
-            this.tableData.splice(this.tableData.indexOf(product), 1); //删除表格信息
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    //保存生产信息
-    SaveProductInfo() {
-      this.dialogFormVisible = true;
-
-      if (this.operationType == "2") {
-        let params = { orderJson: JSON.stringify(this.product) };
+      if (this.activeName == "first") {
+        let params = { orderJson: product };
         https
-          .fetchGet("Order/add", params)
+          .fetchGet("Order/delete", params)
           .then((data) => {
             this.$notify({
               title: "提示",
               message: data.data,
               duration: this.durationTime,
             });
-            if (data.data == "添加成功") {
-              this.tableData.push(this.product);
-              this.dialogFormVisible = false;
+            if (data.data == "删除成功") {
+              this.tableData.splice(this.tableData.indexOf(product), 1); //删除表格信息
             }
           })
           .catch((err) => {
             console.log(err);
           });
-      } else if (this.operationType == "3") {
-        let params = { orderJson: this.product };
+      } else if (this.activeName == "second") {
+        let params = { orderJson: product };
         https
-          .fetchGet("Order/update", params)
+          .fetchGet("ZxcOrder/delete", params)
           .then((data) => {
             this.$notify({
               title: "提示",
               message: data.data,
               duration: this.durationTime,
             });
+            if (data.data == "删除成功") {
+              this.zxcTableData.splice(this.zxcTableData.indexOf(product), 1); //删除表格信息
+            }
           })
           .catch((err) => {
             console.log(err);
           });
       }
     },
+    //保存生产信息
+    SaveProductInfo() {
+      // this.dialogFormVisible = true;
+
+      if (this.operationType == "2") {
+        let params = { orderJson: JSON.stringify(this.product) };
+        console.log(this.activeName);
+        if (this.activeName == "first") {
+          https
+            .fetchGet("Order/add", params)
+            .then((data) => {
+              this.$notify({
+                title: "提示",
+                message: data.data,
+                duration: this.durationTime,
+              });
+              if (data.data == "添加成功") {
+                this.tableData.push(this.product);
+                this.dialogFormVisible = false;
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else if (this.activeName == "second") {
+          let params = { orderJson: JSON.stringify(this.zxcproduct) };
+          https
+            .fetchGet("ZxcOrder/add", params)
+            .then((data) => {
+              this.$notify({
+                title: "提示",
+                message: data.data,
+                duration: this.durationTime,
+              });
+              if (data.data == "添加成功") {
+                this.zxcTableData.push(this.zxcproduct);
+                this.dialogFormVisible = false;
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      } else if (this.operationType == "3") {
+        if (this.activeName == "first") {
+          let params = { orderJson: this.product };
+          https
+            .fetchGet("Order/update", params)
+            .then((data) => {
+              this.$notify({
+                title: "提示",
+                message: data.data,
+                duration: this.durationTime,
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else if (this.activeName == "second") {
+          let params = { orderJson: JSON.stringify(this.zxcproduct) };
+          https
+            .fetchGet("ZxcOrder/update", params)
+            .then((data) => {
+              this.$notify({
+                title: "提示",
+                message: data.data,
+                duration: this.durationTime,
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      }
+    },
 
     //生成二维码
     CreateQRCode() {
-      document.getElementById("qrcode").innerHTML = "";
-      this.qrcode = new QRCode(this.$refs.qrCodeUrl, {
-        text: this.product.VIN, // 需要转换为二维码的内容
-        width: 100,
-        height: 100,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H,
-      });
+      if (this.activeName == "first") {
+        document.getElementById("qrcode").innerHTML = "";
+        let qrInfo = {
+          text: this.product.VIN, // 需要转换为二维码的内容
+          // text:qs.stringify({vin:this.product.VIN,type:1}),
+          width: 100,
+          height: 100,
+          colorDark: "#000000",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H,
+        };
+        this.qrcode = new QRCode(this.$refs.qrCodeUrl, qrInfo);
+      } else if (this.activeName == "second") {
+        document.getElementById("qrcode1").innerHTML = "";
+        let qrInfo = {
+          text: this.zxcproduct.FloorNumber, // 需要转换为二维码的内容
+          //  text:qs.stringify({vin:this.zxcproduct.FloorNumber,type:2}),
+          width: 100,
+          height: 100,
+          colorDark: "#000000",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H,
+        };
+        this.qrcode1 = new QRCode(this.$refs.qrCodeUrl1, qrInfo);
+      }
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -922,9 +1574,24 @@ export default {
     //   }
     //   return this.tableData;
     // },
-    filterData: function () {
+    bgcFilterData: function () {
       var input = this.searchProduct && this.searchProduct.toLowerCase();
       var items = this.tableData;
+      var items1;
+      if (input) {
+        items1 = items.filter(function (item) {
+          return Object.keys(item).some(function (key1) {
+            return String(item[key1]).toLowerCase().match(input);
+          });
+        });
+      } else {
+        items1 = items;
+      }
+      return items1;
+    },
+    zxcFilterData: function () {
+      var input = this.searchProduct && this.searchProduct.toLowerCase();
+      var items = this.zxcTableData;
       var items1;
       if (input) {
         items1 = items.filter(function (item) {
@@ -948,6 +1615,15 @@ export default {
         console.log(err);
       });
 
+    https
+      .fetchGet("ZxcOrder/getall")
+      .then((data) => {
+        this.zxcTableData = data.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     window.document.onkeypress = (e) => {
       if (window.event) {
         // IE
@@ -959,31 +1635,42 @@ export default {
       if (this.nextCode === 13) {
         if (this.code.length < 3) return; // 手动输入的时间不会让code的长度大于2，所以这里只会对扫码枪有
         // 获取到扫码枪输入的内容，做别的操作
-
-        // this.$notify({
-        //   title: "提示",
-        //   message: this.code,
-        //   duration: 3000,
-        // });
-
-        // if (this.code == this.product.VIN) {
-        // this.product.Drawing = "有";
         let params = { vin: this.code };
-        https
-          .fetchGet("Order/getsingle", params)
-          .then((data) => {
-            // this.$notify({
-            //   title: "提示",
-            //   message: data.data,
-            //   duration: 3000,
-            // });
-            this.product = data.data;
-            this.dialogFormVisible = true;
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-        // }
+        if (this.code.indexOf("CWX")>=0) {
+          console.log("11111");
+          https
+            .fetchGet("Order/getsingle", params)
+            .then((data) => {
+              // this.$notify({
+              //   title: "提示",
+              //   message: data.data,
+              //   duration: 3000,
+              // });
+              this.product = data.data;
+              this.dialogFormVisible = true;
+              this.zxcDialogVisible=false;
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }else{
+          console.log("22222");
+          https
+            .fetchGet("ZxcOrder/getsingle", params)
+            .then((data) => {
+              // this.$notify({
+              //   title: "提示",
+              //   message: data.data,
+              //   duration: 3000,
+              // });
+              this.zxcproduct = data.data;
+              this.dialogFormVisible = false;
+              this.zxcDialogVisible=true;
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
 
         this.onchange && this.onchange(this.code);
 
