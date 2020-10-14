@@ -893,6 +893,9 @@
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="SaveProductInfo()">确 定</el-button>
         <el-button type="primary" @click="CreateQRCode()">生成二维码</el-button>
+        <el-button type="primary" @click="zxcPrintPreview()"
+          >打印预览</el-button
+        >
       </div>
     </el-dialog>
     <el-dialog title="工艺图" :visible.sync="dialogPictureVisible">
@@ -934,30 +937,25 @@
       <template>
         <div>
           <section ref="print" id="print">
-            <div id="qrcode2" class="qrcode2" ref="qrCodeUrl2" style="float:right;margin-left:-100px;"></div>
+            <div
+              id="qrcode2"
+              class="qrcode2"
+              ref="qrCodeUrl2"
+              style="float: right; margin-left: -100px"
+            ></div>
             <el-row>
               <el-col :span="8">
-                <p>
-                  生产号：{{
-                    product.ProductNumber
-                  }}
-                </p>
+                <p>生产号：{{ product.ProductNumber }}</p>
               </el-col>
             </el-row>
-            <el-row style="margin-top:-50px;margin-left:-10px;">
+            <el-row style="margin-top: -50px; margin-left: -10px">
               <el-col :span="11">
-                <p>VIN：{{
-                    product.VIN
-                  }}
-                </p>
+                <p>VIN：{{ product.VIN }}</p>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="10">
-                <p>交货期：{{
-                    product.DeliveryDate
-                  }}
-                </p>
+                <p>交货期：{{ product.DeliveryDate }}</p>
               </el-col>
             </el-row>
             <p>
@@ -971,32 +969,18 @@
             </p>
             <el-row>
               <el-col :span="8">
-                <p>
-                  边板厚度：{{
-                    product.SideBoardThickness
-                  }}
-                </p>
+                <p>边板厚度：{{ product.SideBoardThickness }}</p>
               </el-col>
               <el-col :span="12">
-                <p>边板材质：{{
-                    product.SideBoardMaterial
-                  }}
-                </p>
+                <p>边板材质：{{ product.SideBoardMaterial }}</p>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
-                <p>
-                  底板厚度：{{
-                    product.FloorThickness
-                  }}
-                </p>
+                <p>底板厚度：{{ product.FloorThickness }}</p>
               </el-col>
               <el-col :span="12">
-                <p>底板材质：{{
-                    product.FloorMaterial
-                  }}
-                </p>
+                <p>底板材质：{{ product.FloorMaterial }}</p>
               </el-col>
             </el-row>
             <p>
@@ -1008,17 +992,10 @@
             </p>
             <el-row>
               <el-col :span="8">
-                <p>
-                  钢圈材质：{{
-                    product.SteelRingMaterial
-                  }}
-                </p>
+                <p>钢圈材质：{{ product.SteelRingMaterial }}</p>
               </el-col>
               <el-col :span="12">
-                <p>钢圈数量：{{
-                    product.SteelRingNum
-                  }}
-                </p>
+                <p>钢圈数量：{{ product.SteelRingNum }}</p>
               </el-col>
             </el-row>
             <p>
@@ -1032,62 +1009,34 @@
             </p>
             <el-row>
               <el-col :span="8">
-                <p>
-                  液压品牌：{{
-                    product.HydraulicBrand
-                  }}
-                </p>
+                <p>液压品牌：{{ product.HydraulicBrand }}</p>
               </el-col>
               <el-col :span="12">
-                <p>液压型号：{{
-                    product.HydraulicModel
-                  }}
-                </p>
+                <p>液压型号：{{ product.HydraulicModel }}</p>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
-                <p>
-                  车桥：{{
-                    product.Axle
-                  }}
-                </p>
+                <p>车桥：{{ product.Axle }}</p>
               </el-col>
               <el-col :span="12">
-                <p>ABS：{{
-                    product.ABS
-                  }}
-                </p>
+                <p>ABS：{{ product.ABS }}</p>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
-                <p>
-                  空气悬挂：{{
-                    product.HasAirSuspension
-                  }}
-                </p>
+                <p>空气悬挂：{{ product.HasAirSuspension }}</p>
               </el-col>
               <el-col :span="12">
-                <p>自动调整臂：{{
-                    product.HasAdjustingArm
-                  }}
-                </p>
+                <p>自动调整臂：{{ product.HasAdjustingArm }}</p>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
-                <p>
-                  后门类型：{{
-                    product.HasAirSuspension
-                  }}
-                </p>
+                <p>后门类型：{{ product.HasAirSuspension }}</p>
               </el-col>
               <el-col :span="12">
-                <p>喷涂：{{
-                    product.HasAdjustingArm
-                  }}
-                </p>
+                <p>喷涂：{{ product.HasAdjustingArm }}</p>
               </el-col>
             </el-row>
             <p>其它配置：</p>
@@ -1098,18 +1047,189 @@
         <div slot="footer" class="dialog-footer">
           <el-button @click="printDialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="printOrder()">打印</el-button>
-          <el-button type="primary" @click="CreateQRCode()">生成二维码</el-button>
+          <el-button type="primary" @click="CreateQRCode()"
+            >生成二维码</el-button
+          >
+        </div>
+      </template>
+    </el-dialog>
+    <el-dialog :visible.sync="zxcPrintDialogVisible">
+      <template>
+        <div>
+          <section ref="zxcprint" id="zxcprint">
+            <el-divider></el-divider>
+            <div
+              id="qrcode3"
+              class="qrcode3"
+              ref="qrCodeUrl3"
+              style="float: right; margin-left: -500px"
+            ></div>
+            <el-row :gutter="0">
+              <el-col :span="10">
+                <el-form :model="zxcproduct">
+                  <el-form-item label="生产日期" :label-width="formLabelWidth">
+                    {{ zxcproduct.ProductDate }}
+                  </el-form-item>
+                  <el-form-item label="交货期" :label-width="formLabelWidth">
+                    {{ zxcproduct.DeliveryDate }}
+                  </el-form-item>
+                  <el-form-item
+                    label="合同号"
+                    :label-width="formLabelWidth"
+                    auto-complete="off"
+                    :readonly="dialogReadonly"
+                  >
+                    {{ zxcproduct.ProductNumber }}
+                  </el-form-item>
+                  <el-form-item
+                    label="客户名称"
+                    :label-width="formLabelWidth"
+                    auto-complete="off"
+                    :readonly="dialogReadonly"
+                  >
+                    {{ zxcproduct.CustomerName }}
+                  </el-form-item>
+                  <el-form-item label="底板型号" :label-width="formLabelWidth">
+                    {{ zxcproduct.FloorType }}
+                  </el-form-item>
+                  <el-form-item label="底盘号" :label-width="formLabelWidth">
+                    {{ zxcproduct.FloorNumber }}
+                  </el-form-item>
+                  <el-form-item>
+                    <div style="padding: 0px; margin-top: 0px">
+                      <span>特别约定</span>
+                    </div>
+                    <el-input
+                      type="textarea"
+                      :rows="12"
+                      placeholder="请输入内容"
+                      v-model="zxcproduct.Mark"
+                      style="font-size:18px;"
+                    ></el-input>
+                  </el-form-item>
+                </el-form>
+              </el-col>
+              <el-col :span="10">
+                <el-collapse
+                  accordion
+                  v-model="activeCollapseItem"
+                  style="margin-top: 100px"
+                >
+                  <el-collapse-item title="" name="1">
+                    <el-form>
+                      <p>货厢规格</p>
+                      <el-row>
+                        <el-col :span="10">
+                          <el-form-item
+                            label="长"
+                            :label-width="formLabelWidth"
+                          >
+                            {{ zxcproduct.Length }}
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="10">
+                          <el-form-item
+                            label="宽"
+                            :label-width="formLabelWidth"
+                          >
+                            {{ zxcproduct.Width }}
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                      <el-row>
+                        <el-col :span="10">
+                          <el-form-item
+                            label="高"
+                            :label-width="formLabelWidth"
+                          >
+                            {{ zxcproduct.Height }}
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                    </el-form>
+                  </el-collapse-item>
+                  <el-collapse-item title="" name="1" style="margin-top: -0px;">
+                    <el-form>
+                      <p>板厚要求</p>
+                      <el-row>
+                        <el-col :span="10">
+                          <el-form-item
+                            label="底板"
+                            :label-width="formLabelWidth"
+                          >
+                            {{ zxcproduct.FloorThickness }}
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="10">
+                          <el-form-item
+                            label="边板"
+                            :label-width="formLabelWidth"
+                          >
+                            {{ zxcproduct.SideBoardThickness }}
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                      <el-row>
+                        <el-col :span="10">
+                          <el-form-item
+                            label="前挡"
+                            :label-width="formLabelWidth"
+                          >
+                            {{ zxcproduct.FrontboardThickness }}
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="10">
+                          <el-form-item
+                            label="后门"
+                            :label-width="formLabelWidth"
+                          >
+                            {{ zxcproduct.BackboardThickness }}
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                    </el-form>
+                  </el-collapse-item>
+                </el-collapse>
+                <el-form>
+                  <el-form-item
+                    label="材质类型"
+                    :label-width="formLabelWidth"
+                    style="margin-top: 50px"
+                  >
+                    {{ zxcproduct.Material }}
+                  </el-form-item>
+                  <el-form-item label="纵梁数" :label-width="formLabelWidth">
+                    {{ zxcproduct.CarlingNumber }}
+                  </el-form-item>
+                  
+                </el-form>
+              </el-col>
+            </el-row>
+          </section>
+        </div>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="printDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="zxcPrintOrder()">打印</el-button>
+          <el-button type="primary" @click="CreateQRCode()"
+            >生成二维码</el-button
+          >
         </div>
       </template>
     </el-dialog>
   </el-container>
 </template>
-      
-    </el-dialog>
-  </el-container>
-</template>
 
 <style>
+.line-left-right {
+  padding: 0 0px 0px;
+  margin: 20px 0px;
+  line-height: 1px;
+  width: 1500px;
+  border-left: 750px solid rgb(221, 221, 221);
+  border-right: 750px solid rgb(221, 221, 221);
+  text-align: center;
+  height: 2px;
+}
 .el-header {
   background-color: #545c64;
   color: #fff;
@@ -1171,6 +1291,7 @@ export default {
       dialogPictureVisible: false,
       dialogDrawingVisible: false,
       printDialogVisible: false,
+      zxcPrintDialogVisible: false,
       dialogFormVisible: false,
       zxcDialogVisible: false,
       dialogReadonly: false,
@@ -1665,6 +1786,18 @@ export default {
           correctLevel: QRCode.CorrectLevel.H,
         };
         this.qrcode = new QRCode(this.$refs.qrCodeUrl, qrInfo);
+
+        document.getElementById("qrcode2").innerHTML = "";
+        // qrInfo = {
+        //   text: this.product.VIN, // 需要转换为二维码的内容
+        //   //  text:qs.stringify({vin:this.zxcproduct.FloorNumber,type:2}),
+        //   width: 100,
+        //   height: 100,
+        //   colorDark: "#000000",
+        //   colorLight: "#ffffff",
+        //   correctLevel: QRCode.CorrectLevel.H,
+        // };
+        this.qrcode2 = new QRCode(this.$refs.qrCodeUrl2, qrInfo);
       } else if (this.activeName == "second") {
         document.getElementById("qrcode1").innerHTML = "";
         let qrInfo = {
@@ -1677,23 +1810,26 @@ export default {
           correctLevel: QRCode.CorrectLevel.H,
         };
         this.qrcode1 = new QRCode(this.$refs.qrCodeUrl1, qrInfo);
+
+        document.getElementById("qrcode3").innerHTML = "";
+        // qrInfo = {
+        //   text: this.zxcproduct.FloorNumber, // 需要转换为二维码的内容
+        //   //  text:qs.stringify({vin:this.zxcproduct.FloorNumber,type:2}),
+        //   width: 100,
+        //   height: 100,
+        //   colorDark: "#000000",
+        //   colorLight: "#ffffff",
+        //   correctLevel: QRCode.CorrectLevel.H,
+        // };
+        this.qrcode3 = new QRCode(this.$refs.qrCodeUrl3, qrInfo);
       }
-        document.getElementById("qrcode2").innerHTML = "";
-        let qrInfo = {
-          text: this.product.VIN, // 需要转换为二维码的内容
-          //  text:qs.stringify({vin:this.zxcproduct.FloorNumber,type:2}),
-          width: 100,
-          height: 100,
-          colorDark: "#000000",
-          colorLight: "#ffffff",
-          correctLevel: QRCode.CorrectLevel.H,
-        };
-        this.qrcode2 = new QRCode(this.$refs.qrCodeUrl2, qrInfo);
-      
     },
     //打印预览
     printPreview() {
       this.printDialogVisible = true;
+    },
+    zxcPrintPreview() {
+      this.zxcPrintDialogVisible = true;
     },
     //打印订单
     printOrder(index, row) {
@@ -1706,6 +1842,16 @@ export default {
         style: "white-space:nowrap;font-size:10px",
       });
     },
+    zxcPrintOrder(index, row) {
+      printJS({
+        printable: "zxcprint", // 标签元素id
+        type: "html",
+        header: "自卸车生产加工合同",
+        targetStyles: ["*"],
+        style: "white-space:nowrap;font-size:10px",
+      });
+    },
+
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
