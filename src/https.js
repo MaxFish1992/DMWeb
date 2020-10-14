@@ -3,7 +3,7 @@ import qs from 'qs'
 
 axios.defaults.timeout = 5000;                        //响应时间
 axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';        //配置请求头
-axios.defaults.baseURL = ' http://192.168.1.105:8090/';// http://192.168.1.105:8090/     http://localhost:50792/  //配置接口地址
+axios.defaults.baseURL = 'http://192.168.1.105:8090/';// http://192.168.1.105:8090/     http://localhost:50792/  //配置接口地址
 axios.defaults.headers.common['Authority'] = 'Bearer ' + localStorage.getItem('token');
 
 //POST传参序列化(添加请求拦截器)

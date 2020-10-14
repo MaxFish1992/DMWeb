@@ -15,10 +15,10 @@
           @select="handleSelect"
         >
           <el-menu-item
-            v-for="(item, i) in navList"
+            v-for="(item, i) in $MenuItems"
             :key="i"
-            :index="item.name"
-            >{{ item.navItem }}</el-menu-item
+            :index="item.router"
+            >{{ item.name }}</el-menu-item
           >
         </el-menu>
       </el-aside>
@@ -492,20 +492,12 @@ export default {
       orderDialogVisible: false,
       zxcDialogVisible: false,
       dialogDrawingVisible: false,
-      dialogReadonly:true,
+      dialogReadonly: true,
       activeCollapseItem: "1",
       activeIndex: "1",
       imgSrc: require("../../assets/images/wxjz.jpg"),
       imageUrl: "",
       imagenames: [],
-      navList: [
-        { name: "/home", navItem: "首页" },
-        { name: "/productmanage", navItem: "销售订单" },
-        { name: "/salesmanage", navItem: "生产进度" },
-        // { name: "/financialmanage", navItem: "财务管理" },
-        // { name: "/procurementmanage", navItem: "进销存管理" },
-        { name: "/about", navItem: "关于" },
-      ],
     };
   },
   methods: {
@@ -555,6 +547,19 @@ export default {
     },
   },
   created: function () {
+    //获取菜单项
+    let params = { authority: this.$Authority };
+    https
+      .fetchGet("Menu/getmenu", params)
+      .then((data) => {
+        console.log(data.data);
+        this.$root.menuitems = data.data; //qs.stringify(data.data);
+        console.log("menuitems:" + this.$root.menuitems);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     window.document.onkeypress = (e) => {
       if (window.event) {
         // IE

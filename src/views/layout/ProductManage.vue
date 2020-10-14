@@ -15,10 +15,10 @@
           @select="handleSelect"
         >
           <el-menu-item
-            v-for="(item, i) in navList"
+            v-for="(item, i) in $MenuItems"
             :key="i"
-            :index="item.name"
-            >{{ item.navItem }}</el-menu-item
+            :index="item.router"
+            >{{ item.name }}</el-menu-item
           >
         </el-menu>
       </el-aside>
@@ -651,6 +651,7 @@
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="SaveProductInfo()">确 定</el-button>
         <el-button type="primary" @click="CreateQRCode()">生成二维码</el-button>
+        <el-button type="primary" @click="printPreview()">打印预览</el-button>
       </div>
     </el-dialog>
     <el-dialog
@@ -929,6 +930,182 @@
         <img :src="imageUrl" />
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="printDialogVisible">
+      <template>
+        <div>
+          <section ref="print" id="print">
+            <div id="qrcode2" class="qrcode2" ref="qrCodeUrl2" style="float:right;margin-left:-100px;"></div>
+            <el-row>
+              <el-col :span="8">
+                <p>
+                  生产号：{{
+                    product.ProductNumber
+                  }}
+                </p>
+              </el-col>
+            </el-row>
+            <el-row style="margin-top:-50px;margin-left:-10px;">
+              <el-col :span="11">
+                <p>VIN：{{
+                    product.VIN
+                  }}
+                </p>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="10">
+                <p>交货期：{{
+                    product.DeliveryDate
+                  }}
+                </p>
+              </el-col>
+            </el-row>
+            <p>
+              货厢长：{{
+                product.Length
+              }}&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;货厢宽：{{
+                product.Width
+              }}&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;货厢高：{{
+                product.Height
+              }}
+            </p>
+            <el-row>
+              <el-col :span="8">
+                <p>
+                  边板厚度：{{
+                    product.SideBoardThickness
+                  }}
+                </p>
+              </el-col>
+              <el-col :span="12">
+                <p>边板材质：{{
+                    product.SideBoardMaterial
+                  }}
+                </p>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="8">
+                <p>
+                  底板厚度：{{
+                    product.FloorThickness
+                  }}
+                </p>
+              </el-col>
+              <el-col :span="12">
+                <p>底板材质：{{
+                    product.FloorMaterial
+                  }}
+                </p>
+              </el-col>
+            </el-row>
+            <p>
+              轮胎品牌：双钱&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;轮胎花色：{{
+                product.TireShape
+              }}&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;轮胎个数：{{
+                product.TireNum
+              }}
+            </p>
+            <el-row>
+              <el-col :span="8">
+                <p>
+                  钢圈材质：{{
+                    product.SteelRingMaterial
+                  }}
+                </p>
+              </el-col>
+              <el-col :span="12">
+                <p>钢圈数量：{{
+                    product.SteelRingNum
+                  }}
+                </p>
+              </el-col>
+            </el-row>
+            <p>
+              板簧品牌：{{
+                product.PlateSpringBrand
+              }}&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;板簧厚度：{{
+                product.PlateSpringThickness
+              }}&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;板簧片数：{{
+                product.PlateSpringNum
+              }}
+            </p>
+            <el-row>
+              <el-col :span="8">
+                <p>
+                  液压品牌：{{
+                    product.HydraulicBrand
+                  }}
+                </p>
+              </el-col>
+              <el-col :span="12">
+                <p>液压型号：{{
+                    product.HydraulicModel
+                  }}
+                </p>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="8">
+                <p>
+                  车桥：{{
+                    product.Axle
+                  }}
+                </p>
+              </el-col>
+              <el-col :span="12">
+                <p>ABS：{{
+                    product.ABS
+                  }}
+                </p>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="8">
+                <p>
+                  空气悬挂：{{
+                    product.HasAirSuspension
+                  }}
+                </p>
+              </el-col>
+              <el-col :span="12">
+                <p>自动调整臂：{{
+                    product.HasAdjustingArm
+                  }}
+                </p>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="8">
+                <p>
+                  后门类型：{{
+                    product.HasAirSuspension
+                  }}
+                </p>
+              </el-col>
+              <el-col :span="12">
+                <p>喷涂：{{
+                    product.HasAdjustingArm
+                  }}
+                </p>
+              </el-col>
+            </el-row>
+            <p>其它配置：</p>
+            <p>{{ product.Mark }}</p>
+            <!-- <div id="qrcode2" class="qrcode2" ref="qrCodeUrl2" style="float:right;"></div> -->
+          </section>
+        </div>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="printDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="printOrder()">打印</el-button>
+          <el-button type="primary" @click="CreateQRCode()">生成二维码</el-button>
+        </div>
+      </template>
+    </el-dialog>
+  </el-container>
+</template>
+      
+    </el-dialog>
   </el-container>
 </template>
 
@@ -947,6 +1124,10 @@
 }
 .el-input {
   max-width: 250px;
+}
+.p {
+  text-align: left;
+  min-width: 300px;
 }
 /* .el-dialog {
   width: 82%;
@@ -970,6 +1151,7 @@ import qs from "qs";
 import https from "../../https.js";
 import QRCode from "qrcodejs2";
 import axios from "axios";
+import print from "print-js";
 
 export function startUpload(data) {
   return axios({
@@ -988,6 +1170,7 @@ export default {
       formLabelWidth: "120px",
       dialogPictureVisible: false,
       dialogDrawingVisible: false,
+      printDialogVisible: false,
       dialogFormVisible: false,
       zxcDialogVisible: false,
       dialogReadonly: false,
@@ -1000,14 +1183,6 @@ export default {
       imagenames: [],
       imageUrl: "",
       imgSrc: require("../../assets/images/wxjz.jpg"),
-      navList: [
-        { name: "/home", navItem: "首页" },
-        { name: "/productmanage", navItem: "销售订单" },
-        { name: "/salesmanage", navItem: "生产进度" },
-        // { name: "/financialmanage", navItem: "财务管理" },
-        // { name: "/procurementmanage", navItem: "进销存管理" },
-        { name: "/about", navItem: "关于" },
-      ],
       sideboardTypes: [
         {
           value: "高强度",
@@ -1503,6 +1678,33 @@ export default {
         };
         this.qrcode1 = new QRCode(this.$refs.qrCodeUrl1, qrInfo);
       }
+        document.getElementById("qrcode2").innerHTML = "";
+        let qrInfo = {
+          text: this.product.VIN, // 需要转换为二维码的内容
+          //  text:qs.stringify({vin:this.zxcproduct.FloorNumber,type:2}),
+          width: 100,
+          height: 100,
+          colorDark: "#000000",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H,
+        };
+        this.qrcode2 = new QRCode(this.$refs.qrCodeUrl2, qrInfo);
+      
+    },
+    //打印预览
+    printPreview() {
+      this.printDialogVisible = true;
+    },
+    //打印订单
+    printOrder(index, row) {
+      // this.$print(this.$refs.print); // 使用
+      printJS({
+        printable: "print", // 标签元素id
+        type: "html",
+        header: "半挂车技术配置规范确认书",
+        targetStyles: ["*"],
+        style: "white-space:nowrap;font-size:10px",
+      });
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);

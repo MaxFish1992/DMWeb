@@ -13,10 +13,11 @@
           @select="handleSelect"
         >
           <el-menu-item
-            v-for="(item,i) in navList"
+            v-for="(item, i) in $MenuItems"
             :key="i"
-            :index="item.name"
-          >{{ item.navItem }}</el-menu-item>
+            :index="item.router"
+            >{{ item.name }}</el-menu-item
+          >
         </el-menu>
       </el-aside>
 
@@ -170,14 +171,6 @@ export default {
       operationType: "1", // 操作类型,添加、编辑、查看
       activeIndex: "1",
       imgSrc: require("../../assets/images/wxjz.jpg"),
-      navList: [
-        { name: "/home", navItem: "首页" },
-        { name: "/productmanage", navItem: "销售订单" },
-        { name: "/salesmanage", navItem: "生产进度" },
-        // { name: "/financialmanage", navItem: "财务管理" },
-        // { name: "/procurementmanage", navItem: "进销存管理" },
-        { name: "/about", navItem: "关于" },
-      ],
       activeName: "first",
       tableData: [],
       currentSale: {
@@ -290,14 +283,14 @@ export default {
     },
   },
   created: function () {
-    https
-      .fetchGet("Sales/GetAllSales")
-      .then((data) => {
-        this.tableData = data.data;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // https
+    //   .fetchGet("Sales/GetAllSales")
+    //   .then((data) => {
+    //     this.tableData = data.data;
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   },
 };
 </script>

@@ -6,7 +6,7 @@
         <!-- 登录表单区域 -->
         <el-form size="mini">
           <el-form-item>
-            <h3 style="color:white">欢迎登录</h3>
+            <h3 style="color: white">欢迎登录</h3>
           </el-form-item>
           <!-- 用户名 -->
           <el-form-item>
@@ -14,7 +14,11 @@
           </el-form-item>
           <!-- 密码 -->
           <el-form-item>
-            <el-input placeholder="密码" v-model="user.password" show-password></el-input>
+            <el-input
+              placeholder="密码"
+              v-model="user.password"
+              show-password
+            ></el-input>
           </el-form-item>
           <!-- 验证码 -->
           <!-- <el-form-item>
@@ -57,9 +61,10 @@
   </div>
 </template>
 <script>
-import { mapMutations } from 'vuex';
+import { mapMutations } from "vuex";
 import https from "../https.js"; // 注意用自己的路径
 import store from "../store/index.js";
+import qs from "qs";
 export default {
   name: "login_container",
   data() {
@@ -70,11 +75,11 @@ export default {
         password: "",
         Authority: "",
       },
-      userToken: ''
+      userToken: "",
     };
   },
   methods: {
-    ...mapMutations(['changeLogin']),
+    ...mapMutations(["changeLogin"]),
     login: function () {
       // this.$router.push("/home");
       let params = {
@@ -85,8 +90,8 @@ export default {
         .fetchGet("User/login", params)
         .then((res) => {
           this.$root.user = this.user;
-          this.$root.user.Authority = res.data.Authority;
-          console.log(this.$root.user);
+          this.$Authority = res.data.Authority;
+          console.log("Authority:" + this.$Authority);
           if (res.data.Mark == 1 && res.data.Token != "") {
             console.log("保存token!");
             //保存token到状态
@@ -95,11 +100,14 @@ export default {
             // this.$axios.defaults.headers.common["Authority"] =
             //   "Bearer " + res.data.token;
 
-          console.log(res.data);
-          this.userToken = 'Bearer ' + res.data.token;
-          // 将用户token保存到vuex中
-          this.changeLogin({ Authorization: this.userToken });
+            console.log(res.data);
+            this.userToken = "Bearer " + res.data.token;
+            // 将用户token保存到vuex中
+            this.changeLogin({ Authorization: this.userToken });
             // alert("登录成功");
+
+            //获取菜单项
+            this.getmenu();
             //跳转到首页
             this.$router.push({
               path: "/home",
@@ -112,6 +120,23 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    getmenu() {
+      //获取菜单项
+      // let params = { authority: this.$Authority };
+      // https
+      //   .fetchGet("Menu/getmenu", params)
+      //   .then((data) => {
+      //     console.log(data.data);
+      //     for(var i=0;i<data.data.length;i++){
+      //       this.$MenuItems.push(data.data[i]);
+      //     }
+      //     //this.$MenuItems = JSON.stringfity(data.data); //qs.stringify(data.data);
+      //     console.log("menuitems:" + this.$MenuItems);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
     },
     registered: function () {
       this.$router.push("/registered");
