@@ -947,24 +947,24 @@
             <el-row :gutter="0">
               <el-col :span="12">
                 <el-form>
-                  <el-form-item label="生产号：" :label-width="formLabelWidth">
+                  <el-form-item label="生产号：" :label-width="formLabelWidth" style="border-width:1px;border-style:solid;border-color:black;">
                     {{ product.ProductNumber }}
                   </el-form-item>
-                  <el-form-item label="VIN：" :label-width="formLabelWidth">
+                  <el-form-item label="VIN：" :label-width="formLabelWidth" style="border-width:1px;border-style:solid;border-color:black;">
                     {{ product.VIN }}
                   </el-form-item>
-                  <el-form-item label="客户名称：" :label-width="formLabelWidth">
+                  <el-form-item label="客户名称：" :label-width="formLabelWidth" style="border-width:1px;border-style:solid;border-color:black;">
                     {{ product.CustomerName }}
                   </el-form-item>
-                  <el-form-item label="交货期：" :label-width="formLabelWidth">
+                  <el-form-item label="交货期：" :label-width="formLabelWidth" style="border-width:1px;border-style:solid;border-color:black;">
                     {{ product.DeliveryDate }}
                   </el-form-item>
                 </el-form>
               </el-col>
             </el-row>
-            <p style="margin-top:-0px;">-----------------------------------------------------------------------------------------------------------------------------------------------------</p>
-            <p>产品规格</p>
-            <el-row :gutter="0">
+            <!-- <p style="margin-top:-0px;">-----------------------------------------------------------------------------------------------------------------------------------------------------</p> -->
+            <p style="font-weight:bold;font-size:16px;">产品规格</p>
+            <el-row :gutter="0" style="border-width:1px;border-style:solid;border-color:black;height:40px;">
               <el-col :span="7">
                 <el-form>
                   <el-form-item label="货厢长：" :label-width="formLabelWidth">
@@ -987,7 +987,7 @@
                 </el-form>
               </el-col>
             </el-row>
-            <el-row>
+            <el-row style="border-width:1px;border-style:solid;border-color:black;height:42px;margin-top:20px;">
               <el-col :span="10">
                 <el-form>
                   <el-form-item label="边板厚度：" :label-width="formLabelWidth">
@@ -1003,7 +1003,7 @@
                 </el-form>
               </el-col>
             </el-row>
-            <el-row>
+            <el-row style="border-width:1px;border-style:solid;border-color:black;height:45px;margin-top:20px;">
               <el-col :span="10">
                 <el-form>
                   <el-form-item label="底板厚度：" :label-width="formLabelWidth">
@@ -1019,7 +1019,7 @@
                 </el-form>
               </el-col>
             </el-row>
-            <el-row>
+            <el-row style="border-width:1px;border-style:solid;border-color:black;height:45px;margin-top:20px;">
               <el-col :span="10">
                 <el-form>
                   <el-form-item label="后门类型：" :label-width="formLabelWidth">
@@ -1028,9 +1028,9 @@
                 </el-form>
               </el-col>
             </el-row>
-            <p style="margin-top:-0px;">-----------------------------------------------------------------------------------------------------------------------------------------------------</p>
-            <p>产品配置</p>
-            <el-row>
+            <!-- <p style="margin-top:18px;">-----------------------------------------------------------------------------------------------------------------------------------------------------</p> -->
+            <p style="font-weight:bold;font-size:16px;margin-top:20px;">产品配置</p>
+            <el-row style="border-width:1px;border-style:solid;border-color:black;height:40px;">
               <el-col :span="7">
                 <el-form>
                   <el-form-item label="轮胎品牌：" :label-width="formLabelWidth">
@@ -1053,7 +1053,7 @@
                 </el-form>
               </el-col>
             </el-row>
-            <el-row>
+            <el-row style="border-width:1px;border-style:solid;border-color:black;height:42px;margin-top:20px;">
               <el-col :span="10">
                 <el-form>
                   <el-form-item label="钢圈材质：" :label-width="formLabelWidth">
@@ -1069,7 +1069,7 @@
                 </el-form>
               </el-col>
             </el-row>
-            <el-row>
+            <el-row style="border-width:1px;border-style:solid;border-color:black;height:45px;margin-top:20px;">
               <el-col :span="7">
                 <el-form>
                   <el-form-item label="板簧品牌：" :label-width="formLabelWidth">
@@ -1092,7 +1092,7 @@
                 </el-form>
               </el-col>
             </el-row>
-            <el-row>
+            <el-row style="border-width:1px;border-style:solid;border-color:black;height:40px;margin-top:20px;">
               <el-col :span="10">
                 <el-form>
                   <el-form-item label="液压品牌：" :label-width="formLabelWidth">
@@ -1108,7 +1108,7 @@
                 </el-form>
               </el-col>
             </el-row>
-            <el-row>
+            <el-row style="border-width:1px;border-style:solid;border-color:black;height:42px;margin-top:20px;">
               <el-col :span="10">
                 <el-form>
                   <el-form-item label="车桥：" :label-width="formLabelWidth">
@@ -1124,24 +1124,22 @@
                 </el-form>
               </el-col>
             </el-row>
-            <el-row>
-              <el-col :span="10">
+            <el-row style="border-width:1px;border-style:solid;border-color:black;height:42px;margin-top:20px;">
+              <el-col :span="7">
                 <el-form>
                   <el-form-item label="空气悬挂：" :label-width="formLabelWidth">
                     {{ product.HasAirSuspension }}
                   </el-form-item>
                 </el-form>
               </el-col>
-              <el-col :span="10">
+              <el-col :span="7">
                 <el-form>
                   <el-form-item label="自动调整臂：" :label-width="formLabelWidth">
                     {{ product.HasAdjustingArm }}
                   </el-form-item>
                 </el-form>
               </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
+              <el-col :span="7">
                 <el-form>
                   <el-form-item label="喷涂：" :label-width="formLabelWidth">
                     {{ product.SprayPaint }}
@@ -1184,10 +1182,10 @@
             <el-row :gutter="0">
               <el-col :span="10">
                 <el-form :model="zxcproduct">
-                  <el-form-item label="生产日期" :label-width="formLabelWidth">
+                  <el-form-item label="生产日期" :label-width="formLabelWidth" style="border-width:1px;border-style:solid;border-color:black;">
                     {{ zxcproduct.ProductDate }}
                   </el-form-item>
-                  <el-form-item label="交货期" :label-width="formLabelWidth">
+                  <el-form-item label="交货期" :label-width="formLabelWidth" style="border-width:1px;border-style:solid;border-color:black;">
                     {{ zxcproduct.DeliveryDate }}
                   </el-form-item>
                   <el-form-item
@@ -1195,6 +1193,7 @@
                     :label-width="formLabelWidth"
                     auto-complete="off"
                     :readonly="dialogReadonly"
+                    style="border-width:1px;border-style:solid;border-color:black;"
                   >
                     {{ zxcproduct.ProductNumber }}
                   </el-form-item>
@@ -1203,19 +1202,20 @@
                     :label-width="formLabelWidth"
                     auto-complete="off"
                     :readonly="dialogReadonly"
+                    style="border-width:1px;border-style:solid;border-color:black;"
                   >
                     {{ zxcproduct.CustomerName }}
                   </el-form-item>
-                  <el-form-item label="底板型号" :label-width="formLabelWidth">
+                  <el-form-item label="底板型号" :label-width="formLabelWidth" style="border-width:1px;border-style:solid;border-color:black;">
                     {{ zxcproduct.FloorType }}
                   </el-form-item>
-                  <el-form-item label="底盘号" :label-width="formLabelWidth">
+                  <el-form-item label="底盘号" :label-width="formLabelWidth" style="border-width:1px;border-style:solid;border-color:black;">
                     {{ zxcproduct.FloorNumber }}
                   </el-form-item>
-                  <p>----------------------------------------------------------------------</p>
+                  <!-- <p>----------------------------------------------------------------------</p> -->
                   <el-form-item>
                     <div style="padding: 0px; margin-top: 0px">
-                      <span>特别约定</span>
+                      <span style="font-weight:bold;font-size:20px;">特别约定</span>
                     </div>
                     <el-input
                       type="textarea"
@@ -1234,10 +1234,10 @@
                   style="margin-top: 100px"
                 >
                   <el-collapse-item title="" name="1">
-                    <el-form>
-                      <p>货厢规格</p>
+                    <el-form style="border-width:1px;border-style:solid;border-color:black;margin-left:10px">
+                      <p style="font-weight:bold;font-size:16px;">货厢规格</p>
                       <el-row>
-                        <el-col :span="10">
+                        <el-col :span="11">
                           <el-form-item
                             label="长"
                             :label-width="formLabelWidth"
@@ -1245,7 +1245,7 @@
                             {{ zxcproduct.Length }}
                           </el-form-item>
                         </el-col>
-                        <el-col :span="10">
+                        <el-col :span="11">
                           <el-form-item
                             label="宽"
                             :label-width="formLabelWidth"
@@ -1255,7 +1255,7 @@
                         </el-col>
                       </el-row>
                       <el-row>
-                        <el-col :span="10">
+                        <el-col :span="11">
                           <el-form-item
                             label="高"
                             :label-width="formLabelWidth"
@@ -1267,10 +1267,10 @@
                     </el-form>
                   </el-collapse-item>
                   <el-collapse-item title="" name="1" style="margin-top: -0px;">
-                    <el-form>
-                      <p>板厚要求</p>
+                    <el-form style="border-width:1px;border-style:solid;border-color:black;margin-left:10px">
+                      <p style="font-weight:bold;font-size:16px;">板厚要求</p>
                       <el-row>
-                        <el-col :span="10">
+                        <el-col :span="11">
                           <el-form-item
                             label="底板"
                             :label-width="formLabelWidth"
@@ -1278,7 +1278,7 @@
                             {{ zxcproduct.FloorThickness }}
                           </el-form-item>
                         </el-col>
-                        <el-col :span="10">
+                        <el-col :span="11">
                           <el-form-item
                             label="边板"
                             :label-width="formLabelWidth"
@@ -1288,7 +1288,7 @@
                         </el-col>
                       </el-row>
                       <el-row>
-                        <el-col :span="10">
+                        <el-col :span="11">
                           <el-form-item
                             label="前挡"
                             :label-width="formLabelWidth"
@@ -1296,7 +1296,7 @@
                             {{ zxcproduct.FrontboardThickness }}
                           </el-form-item>
                         </el-col>
-                        <el-col :span="10">
+                        <el-col :span="11">
                           <el-form-item
                             label="后门"
                             :label-width="formLabelWidth"
@@ -1312,11 +1312,11 @@
                   <el-form-item
                     label="材质类型"
                     :label-width="formLabelWidth"
-                    style="margin-top: 50px"
+                    style="border-width:1px;border-style:solid;border-color:black;margin-left:10px;"
                   >
                     {{ zxcproduct.Material }}
                   </el-form-item>
-                  <el-form-item label="纵梁数" :label-width="formLabelWidth">
+                  <el-form-item label="纵梁数" :label-width="formLabelWidth" style="border-width:1px;border-style:solid;border-color:black;margin-left:10px;">
                     {{ zxcproduct.CarlingNumber }}
                   </el-form-item>
                   
@@ -1338,16 +1338,6 @@
 </template>
 
 <style>
-.line-left-right {
-  padding: 0 0px 0px;
-  margin: 20px 0px;
-  line-height: 1px;
-  width: 1500px;
-  border-left: 750px solid rgb(221, 221, 221);
-  border-right: 750px solid rgb(221, 221, 221);
-  text-align: center;
-  height: 2px;
-}
 .el-header {
   background-color: #545c64;
   color: #fff;
