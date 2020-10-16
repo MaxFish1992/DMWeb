@@ -1,6 +1,8 @@
 <template>
   <el-container>
-    <el-header style="text-align: center; font-size: 26px">智能化生产管理系统</el-header>
+    <el-header style="text-align: center; font-size: 30px"
+      >智能化生产管理系统</el-header
+    >
     <el-container style="height: 100%; border: 1px solid #eee">
       <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
         <el-menu
@@ -13,7 +15,7 @@
           @select="handleSelect"
         >
           <el-menu-item
-            v-for="(item, i) in $MenuItems"
+            v-for="(item, i) in menuitems"
             :key="i"
             :index="item.router"
             >{{ item.name }}</el-menu-item
@@ -42,11 +44,13 @@
 </style>
 
 <script>
+import https from "../https.js"; // 注意用自己的路径
 export default {
   data() {
     return {
       activeIndex: "1",
       imgSrc: require("../assets/images/wxjz.jpg"),
+      menuitems: [],
     };
   },
   methods: {
@@ -54,5 +58,17 @@ export default {
       console.log(key, keyPath);
     },
   },
+  created: function () {
+      let params = { authority: this.$root.user.authority };
+      https
+        .fetchGet("Menu/getmenu", params)
+        .then((data) => {
+          this.menuitems = [];
+          this.menuitems = data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
 };
 </script>

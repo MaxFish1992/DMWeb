@@ -15,7 +15,7 @@
           @select="handleSelect"
         >
           <el-menu-item
-            v-for="(item, i) in $MenuItems"
+            v-for="(item, i) in menuitems"
             :key="i"
             :index="item.router"
             >{{ item.name }}</el-menu-item
@@ -1375,6 +1375,7 @@
 </style>
 
 <script>
+import { mapMutations } from "vuex";
 import qs from "qs";
 import https from "../../https.js";
 import QRCode from "qrcodejs2";
@@ -1566,6 +1567,7 @@ export default {
       qrcode1: {},
       searchProduct: "",
       durationTime: 1500,
+      menuitems:[]
     };
   },
   methods: {
@@ -2079,6 +2081,18 @@ export default {
     },
   },
   created: function () {
+
+    let params = { authority: this.$root.user.authority };
+    https
+      .fetchGet("Menu/getmenu", params)
+      .then((data) => {
+        this.menuitems = [];
+        this.menuitems = data.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     https
       .fetchGet("Order/getall")
       .then((data) => {

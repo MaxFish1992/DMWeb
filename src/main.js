@@ -18,14 +18,14 @@ import store from './store'
 // import print from './plugs/print.js'
 
 Vue.prototype.$Authority = 4;
-Vue.prototype.$MenuItems = [
-  { router: "/home", name: "首页" },
-  { router: "/productmanage", name: "销售订单" },
-  { router: "/salesmanage", name: "生产进度" },
-  // { name: "/financialmanage", navItem: "财务管理" },
-  // { name: "/procurementmanage", navItem: "进销存管理" },
-  { router: "/about", name: "关于" },
-];
+// Vue.prototype.$MenuItems = [
+//   { router: "/home", name: "首页" },
+//   { router: "/productmanage", name: "销售订单" },
+//   // { router: "/salesmanage", name: "生产进度" },
+//   // { name: "/financialmanage", navItem: "财务管理" },
+//   // { name: "/procurementmanage", navItem: "进销存管理" },
+//   { router: "/about", name: "关于" },
+// ];
 Vue.prototype.$MenuItems1 = [];
 Vue.prototype.$store = store
 Vue.prototype.$axios = axios;
@@ -56,7 +56,7 @@ new Vue({
       user: {
         userName: "",
         password: "",
-        Authority: "",
+        authority: "",
       },
       // menuitems:[],
     }

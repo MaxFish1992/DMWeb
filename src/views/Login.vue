@@ -90,6 +90,7 @@ export default {
         .fetchGet("User/login", params)
         .then((res) => {
           this.$root.user = this.user;
+          this.$root.user.authority = res.data.Authority;
           this.$Authority = res.data.Authority;
           console.log("Authority:" + this.$Authority);
           if (res.data.Mark == 1 && res.data.Token != "") {
@@ -100,14 +101,12 @@ export default {
             // this.$axios.defaults.headers.common["Authority"] =
             //   "Bearer " + res.data.token;
 
-            console.log(res.data);
+            console.log(this.$root.user);
             this.userToken = "Bearer " + res.data.token;
             // 将用户token保存到vuex中
             this.changeLogin({ Authorization: this.userToken });
             // alert("登录成功");
 
-            //获取菜单项
-            this.getmenu();
             //跳转到首页
             this.$router.push({
               path: "/home",
@@ -120,23 +119,6 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-    },
-    getmenu() {
-      //获取菜单项
-      // let params = { authority: this.$Authority };
-      // https
-      //   .fetchGet("Menu/getmenu", params)
-      //   .then((data) => {
-      //     console.log(data.data);
-      //     for(var i=0;i<data.data.length;i++){
-      //       this.$MenuItems.push(data.data[i]);
-      //     }
-      //     //this.$MenuItems = JSON.stringfity(data.data); //qs.stringify(data.data);
-      //     console.log("menuitems:" + this.$MenuItems);
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
     },
     registered: function () {
       this.$router.push("/registered");

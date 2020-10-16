@@ -15,7 +15,7 @@
           @select="handleSelect"
         >
           <el-menu-item
-            v-for="(item, i) in $MenuItems"
+            v-for="(item, i) in menuitems"
             :key="i"
             :index="item.router"
             >{{ item.name }}</el-menu-item
@@ -498,6 +498,7 @@ export default {
       imgSrc: require("../../assets/images/wxjz.jpg"),
       imageUrl: "",
       imagenames: [],
+      menuitems:[]
     };
   },
   methods: {
@@ -548,13 +549,12 @@ export default {
   },
   created: function () {
     //获取菜单项
-    let params = { authority: this.$Authority };
+    let params = { authority: this.$root.user.authority };
     https
       .fetchGet("Menu/getmenu", params)
       .then((data) => {
-        console.log(data.data);
-        this.$root.menuitems = data.data; //qs.stringify(data.data);
-        console.log("menuitems:" + this.$root.menuitems);
+        this.menuitems = [];
+        this.menuitems = data.data;
       })
       .catch((err) => {
         console.log(err);

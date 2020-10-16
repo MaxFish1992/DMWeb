@@ -13,7 +13,7 @@
           @select="handleSelect"
         >
           <el-menu-item
-            v-for="(item, i) in $MenuItems"
+            v-for="(item, i) in menuitems"
             :key="i"
             :index="item.router"
             >{{ item.name }}</el-menu-item
@@ -32,7 +32,7 @@
           <el-button type="text" @click="addSale()">新增</el-button>
           <el-button type="text" @click="exitSystem()">退出</el-button>
         </el-header>
-        <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tabs v-model="activeName" >
           <el-tab-pane label="自卸半挂" name="first">
             <el-table :data="tableData" style="width: 100%;" max-height="855">
               <el-table-column prop="ContractNum" label="合同号" width="120"></el-table-column>
@@ -71,6 +71,7 @@
               <el-table-column prop label="后门" width="120"></el-table-column>
               <el-table-column prop label="合厢" width="120"></el-table-column>
               <el-table-column prop label="装厢" width="120"></el-table-column>
+              <el-table-column prop label="小件" width="120"></el-table-column>
               <el-table-column prop label="喷漆" width="120"></el-table-column>
               <el-table-column fixed="right" label="操作" width="150">
                 <template slot-scope="scope">
@@ -183,6 +184,7 @@ export default {
         IsCompletion: "",
       },
       search: "",
+      menuitems:[]
     };
   },
   methods: {
@@ -283,6 +285,17 @@ export default {
     },
   },
   created: function () {
+    let params = { authority: this.$root.user.authority };
+    https
+      .fetchGet("Menu/getmenu", params)
+      .then((data) => {
+        this.menuitems = [];
+        this.menuitems = data.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     // https
     //   .fetchGet("Sales/GetAllSales")
     //   .then((data) => {
