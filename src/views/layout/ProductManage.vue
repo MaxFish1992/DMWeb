@@ -2013,7 +2013,7 @@ export default {
           } else if (this.activeName == "second") {
             let params = { orderJson: product };
             https
-              .fetchGet("ZxcOrder/delete", params)
+              .fetchPost("ZxcOrder/delete", product)
               .then((data) => {
                 this.$notify({
                   title: "提示",
@@ -2066,7 +2066,7 @@ export default {
         } else if (this.activeName == "second") {
           let params = { orderJson: JSON.stringify(this.zxcproduct) };
           https
-            .fetchGet("ZxcOrder/add", params)
+            .fetchPost("ZxcOrder/add", this.zxcproduct)
             .then((data) => {
               this.$notify({
                 title: "提示",
@@ -2100,7 +2100,7 @@ export default {
         } else if (this.activeName == "second") {
           let params = { orderJson: this.zxcproduct };
           https
-            .fetchGet("ZxcOrder/update", params)
+            .fetchPost("ZxcOrder/update", this.zxcproduct)
             .then((data) => {
               this.$notify({
                 title: "提示",
