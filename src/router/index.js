@@ -52,6 +52,11 @@ const router = new Router({
       path: '/salesmanage', // 销售管理
       name: 'salesmanage',
       component: () => import('../views/layout/SalesManage.vue')
+    },
+    {
+      path: '/aftersalesmanage', // 售后服务
+      name: 'aftersalesmanage',
+      component: () => import('../views/layout/AfterSalesManage.vue')
     }
   ]
 });
