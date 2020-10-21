@@ -106,7 +106,20 @@ export default {
             // 将用户token保存到vuex中
             this.changeLogin({ Authorization: this.userToken });
             // alert("登录成功");
-
+            //获取菜单项
+            //if (this.menuitems == false) {
+            let params = { authority: this.$root.user.authority };
+            https
+              .fetchGet("Menu/getmenu", params)
+              .then((data) => {
+                this.$root.menuitems = [];
+                this.$root.menuitems = data.data;
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+            console.log(this.$root.menuitems);
+            //}
             //跳转到首页
             this.$router.push({
               path: "/home",

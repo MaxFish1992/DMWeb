@@ -15,7 +15,7 @@
           @select="handleSelect"
         >
           <el-menu-item
-            v-for="(item, i) in menuitems"
+            v-for="(item, i) in $root.menuitems"
             :key="i"
             :index="item.router"
             >{{ item.name }}</el-menu-item
@@ -567,7 +567,10 @@ export default {
                   duration: 1500,
                 });
                 if (data.data == "删除成功") {
-                  this.zxcTableData.splice(this.zxcTableData.indexOf(product), 1); //删除表格信息
+                  this.zxcTableData.splice(
+                    this.zxcTableData.indexOf(product),
+                    1
+                  ); //删除表格信息
                 }
               })
               .catch((err) => {
@@ -693,16 +696,6 @@ export default {
     },
   },
   created: function () {
-    let params = { authority: this.$root.user.authority };
-    https
-      .fetchGet("Menu/getmenu", params)
-      .then((data) => {
-        this.menuitems = [];
-        this.menuitems = data.data;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
 
     https
       .fetchGet("Product/getall")

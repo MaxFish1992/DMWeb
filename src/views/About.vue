@@ -15,7 +15,7 @@
           @select="handleSelect"
         >
           <el-menu-item
-            v-for="(item, i) in menuitems"
+            v-for="(item, i) in $root.menuitems"
             :key="i"
             :index="item.router"
             >{{ item.name }}</el-menu-item
@@ -59,16 +59,7 @@ export default {
     },
   },
   created: function () {
-      let params = { authority: this.$root.user.authority };
-      https
-        .fetchGet("Menu/getmenu", params)
-        .then((data) => {
-          this.menuitems = [];
-          this.menuitems = data.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
+    
+  },
 };
 </script>

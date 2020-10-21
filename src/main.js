@@ -58,7 +58,7 @@ new Vue({
         password: "",
         authority: "",
       },
-      // menuitems:[],
+      menuitems:[],
     }
   },
   render: h => h(App)
