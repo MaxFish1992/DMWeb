@@ -36,6 +36,7 @@
         <el-tabs v-model="activeName">
           <el-tab-pane label="自卸半挂" name="first">
             <el-table
+              class="bgctable"
               :data="bgcFilterData"
               style="width: 100%"
               max-height="855"
@@ -138,6 +139,7 @@
           </el-tab-pane>
           <el-tab-pane label="自卸车" name="second">
             <el-table
+              class="zxctable"
               :data="zxcFilterData"
               style="width: 100%"
               max-height="855"
@@ -1475,7 +1477,7 @@
                     border-style: solid;
                     border-color: black;
                     margin-left: 10px;
-                    margin-top:100px;
+                    margin-top: 100px;
                   "
                 >
                   <p style="font-weight: bold; font-size: 16px">货厢规格</p>
@@ -2114,7 +2116,7 @@ export default {
         }
       }
     },
-
+    
     //生成二维码
     CreateQRCode() {
       if (this.activeName == "first") {
@@ -2296,7 +2298,6 @@ export default {
     },
   },
   created: function () {
-
     https
       .fetchGet("Order/getall")
       .then((data) => {

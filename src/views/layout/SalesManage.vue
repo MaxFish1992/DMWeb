@@ -26,17 +26,19 @@
       <el-container>
         <el-header style="text-align: right; font-size: 16px">
           <el-input
-            v-model="search"
+            v-model="searchProduct"
             size="mini"
             placeholder="输入关键字搜索"
             style="width: 200px; margin-right: 20px"
           />
           <el-button type="text" @click="addSale()">新增</el-button>
+          <el-button type="text" @click="ExportTable()">导出</el-button>
           <el-button type="text" @click="exitSystem()">退出</el-button>
         </el-header>
         <el-tabs v-model="activeName">
           <el-tab-pane label="自卸半挂" name="first">
             <el-table
+            class="bgctable"
               :data="bgcFilterData"
               style="width: 100%"
               max-height="855"
@@ -132,6 +134,7 @@
           </el-tab-pane>
           <el-tab-pane label="自卸车" name="second">
             <el-table
+            class="zxctable"
               :data="zxcFilterData"
               style="width: 100%"
               max-height="855"
@@ -440,6 +443,8 @@
 
 <script>
 import https from "../../https.js";
+import FileSaver from "file-saver";
+import XLSX from "xlsx";
 export default {
   data() {
     return {
@@ -655,6 +660,50 @@ export default {
               console.log(err);
             });
         }
+      }
+    },
+    //导出表格
+    ExportTable() {
+      if (this.activeName == "first") {
+        /* generate workbook object from table */
+        //  .table要导出的表格
+        var wb = XLSX.utils.table_to_book(document.querySelector(".bgctable"));
+        /* get binary string as output */
+        var wbout = XLSX.write(wb, {
+          bookType: "xlsx",
+          bookSST: true,
+          type: "array",
+        });
+        try {
+          //table.xlsx默认导出文件名，在弹出文件夹框的时候可修改保存
+          FileSaver.saveAs(
+            new Blob([wbout], { type: "application/octet-stream" }),
+            "半挂车生产进度.xlsx"
+          );
+        } catch (e) {
+          if (typeof console !== "undefined") console.log(e, wbout);
+        }
+        return wbout;
+      } else if (this.activeName == "second") {
+        /* generate workbook object from table */
+        //  .table要导出的表格
+        var wb = XLSX.utils.table_to_book(document.querySelector(".zxctable"));
+        /* get binary string as output */
+        var wbout = XLSX.write(wb, {
+          bookType: "xlsx",
+          bookSST: true,
+          type: "array",
+        });
+        try {
+          //table.xlsx默认导出文件名，在弹出文件夹框的时候可修改保存
+          FileSaver.saveAs(
+            new Blob([wbout], { type: "application/octet-stream" }),
+            "自卸车生产进度.xlsx"
+          );
+        } catch (e) {
+          if (typeof console !== "undefined") console.log(e, wbout);
+        }
+        return wbout;
       }
     },
     //退出系统
