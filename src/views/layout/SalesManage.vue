@@ -25,9 +25,22 @@
 
       <el-container>
         <el-header style="text-align: right; font-size: 16px">
+          <el-date-picker
+            v-model="queryrange"
+            type="daterange"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            value-format="yyyy-MM-dd"
+          >
+          </el-date-picker>
+          <el-button
+            type="text"
+            @click="queryByDate()"
+            style="margin-right: 50px; margin-left: 10px"
+            >查询</el-button
+          >
           <el-input
             v-model="searchProduct"
-            size="mini"
             placeholder="输入关键字搜索"
             style="width: 200px; margin-right: 20px"
           />
@@ -38,11 +51,18 @@
         <el-tabs v-model="activeName">
           <el-tab-pane label="自卸半挂" name="first">
             <el-table
-            class="bgctable"
+              class="bgctable"
               :data="bgcFilterData"
               style="width: 100%"
               max-height="855"
             >
+              <el-table-column
+                fixed
+                prop="ProductDate"
+                label="日期"
+                width="120"
+                :formatter="formatDate"
+              ></el-table-column>
               <el-table-column
                 prop="ContractNum"
                 label="合同号"
@@ -134,11 +154,18 @@
           </el-tab-pane>
           <el-tab-pane label="自卸车" name="second">
             <el-table
-            class="zxctable"
+              class="zxctable"
               :data="zxcFilterData"
               style="width: 100%"
               max-height="855"
             >
+              <el-table-column
+                fixed
+                prop="ProductDate"
+                label="日期"
+                width="120"
+                :formatter="formatDate"
+              ></el-table-column>
               <el-table-column
                 prop="ContractNum"
                 label="合同号"
@@ -223,9 +250,18 @@
       <el-dialog
         title="半挂车生产信息"
         :visible.sync="dialogFormVisible"
-        width="30%"
+        width="25%"
       >
         <el-form :model="product">
+          <el-form-item label="生产日期" :label-width="formLabelWidth">
+            <el-date-picker
+              v-model="product.ProductDate"
+              type="date"
+              placeholder="选择日期"
+              value-format="yyyy-MM-dd"
+            >
+            </el-date-picker>
+          </el-form-item>
           <el-form-item label="合同号" :label-width="formLabelWidth">
             <el-input
               v-model="product.ContractNum"
@@ -331,9 +367,18 @@
       <el-dialog
         title="自卸车生产信息"
         :visible.sync="zxcDialogFormVisible"
-        width="30%"
+        width="25%"
       >
         <el-form :model="zxcproduct">
+          <el-form-item label="生产日期" :label-width="formLabelWidth">
+            <el-date-picker
+              v-model="zxcproduct.ProductDate"
+              type="date"
+              placeholder="选择日期"
+              value-format="yyyy-MM-dd"
+            >
+            </el-date-picker>
+          </el-form-item>
           <el-form-item label="合同号" :label-width="formLabelWidth">
             <el-input
               v-model="zxcproduct.ContractNum"
@@ -459,7 +504,9 @@ export default {
       tableData: [],
       zxcTableData: [],
       searchProduct: "",
+      queryrange: "",
       product: {
+        ProductDate: "",
         ContractNum: "",
         VINNum: "",
         Blanking: "",
@@ -475,6 +522,7 @@ export default {
         SmallParts: "",
       },
       zxcproduct: {
+        ProductDate: "",
         ContractNum: "",
         VINNum: "",
         Blanking: "",
@@ -495,6 +543,61 @@ export default {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },
+    formatDate(row, column) {
+      // 获取单元格数据
+      let data = row[column.property];
+      if (data == null) {
+        return null;
+      }
+      let dt = new Date(data);
+      return dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
+    },
+    //根据时间段查询生产信息
+    queryByDate() {
+      if (this.activeName == "first") {
+        if (this.queryrange==null||this.queryrange[0] == null || this.queryrange[1] == null) {
+          https
+            .fetchGet("Product/getall")
+            .then((data) => {
+              this.tableData = data.data;
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+          return;
+        }
+        let params = { start: this.queryrange[0], end: this.queryrange[1] };
+        https
+          .fetchGet("Product/getproductbydate", params)
+          .then((data) => {
+            this.tableData = data.data;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else if (this.activeName == "second") {
+        if (this.queryrange[0] == null || this.queryrange[1] == null) {
+          https
+            .fetchGet("ZxcProduct/getall")
+            .then((data) => {
+              this.zxcTableData = data.data;
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+          return;
+        }
+        let params = { start: this.queryrange[0], end: this.queryrange[1] };
+        https
+          .fetchGet("ZxcProduct/getproductbydate", params)
+          .then((data) => {
+            this.zxcTableData = data.data;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    },
     //查看生产信息
     showSale(sale) {
       if (this.activeName == "first") {
@@ -511,12 +614,23 @@ export default {
     },
     //添加生产信息
     addSale() {
+      // var nowDate = new Date();
+      // let date = {
+      //   year: nowDate.getFullYear(),
+      //   month: nowDate.getMonth() + 1,
+      //   date: nowDate.getDate(),
+      // };
+      // console.log(date);
+      // let systemDate = date.year + "-" + date.month + "-" + date.date;
+
       if (this.activeName == "first") {
         this.dialogFormVisible = true;
         this.zxcDialogFormVisible = false;
+        this.product.ProductDate = new Date();
       } else if (this.activeName == "second") {
         this.dialogFormVisible = false;
         this.zxcDialogFormVisible = true;
+        this.zxcproduct.ProductDate = new Date();
       }
       this.dialogReadonly = false;
       this.operationType = "2";
@@ -745,7 +859,6 @@ export default {
     },
   },
   created: function () {
-
     https
       .fetchGet("Product/getall")
       .then((data) => {

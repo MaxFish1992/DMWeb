@@ -26,7 +26,6 @@
         <el-header style="text-align: right; font-size: 16px">
           <el-input
             v-model="searchProduct"
-            size="mini"
             placeholder="输入关键字搜索"
             style="width: 200px; margin-right: 20px"
           />
@@ -1549,7 +1548,7 @@
                     </div>
                     <el-input
                       type="textarea"
-                      :rows="12"
+                      :rows="8"
                       placeholder="请输入内容"
                       v-model="zxcproduct.Mark"
                       style="font-size: 24px; font-weight: bold"

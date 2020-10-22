@@ -27,7 +27,6 @@
         <el-header style="text-align: right; font-size: 16px">
           <el-input
             v-model="search"
-            size="mini"
             placeholder="输入关键字搜索"
             style="width: 200px; margin-right: 20px"
           />
