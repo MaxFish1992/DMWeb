@@ -644,7 +644,7 @@ export default {
       } else if (this.activeName == "second") {
         this.zxcDialogFormVisible = true;
         this.dialogFormVisible = false;
-        this.zxcproduct = sale;
+        this.zxcproduct = sale;//JSON.parse(JSON.stringify(sale));
       }
       this.dialogReadonly = false;
       this.operationType = "3";
