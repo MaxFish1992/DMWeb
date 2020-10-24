@@ -2057,7 +2057,7 @@ export default {
                 duration: this.durationTime,
               });
               if (data.data == "添加成功") {
-                this.tableData.push(this.product);
+                this.tableData.unshift(this.product);
                 this.dialogFormVisible = false;
               }
             })
@@ -2075,7 +2075,7 @@ export default {
                 duration: this.durationTime,
               });
               if (data.data == "添加成功") {
-                this.zxcTableData.push(this.zxcproduct);
+                this.zxcTableData.unshift(this.zxcproduct);
                 this.dialogFormVisible = false;
               }
             })
