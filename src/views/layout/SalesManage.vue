@@ -52,10 +52,14 @@
           <el-tab-pane label="自卸半挂" name="first">
             <el-table
               class="bgctable"
-              :data="bgcFilterData"
-              style="width: 100%"
-              max-height="855"
-              stripe
+              :data="
+                bgcFilterData.slice(
+                  (currentPage - 1) * pageSize,
+                  currentPage * pageSize
+                )
+              "
+              :show-header="true"
+              style="width: 100%; overflow-y: auto;"
             >
               <el-table-column
                 fixed
@@ -152,14 +156,29 @@
                 </template>
               </el-table-column>
             </el-table>
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-sizes="[5, 10, 20, 30, 50, 100]"
+              :page-size="pageSize"
+              layout="total, prev, pager, next, jumper"
+              :total="bgcFilterData.length"
+              class="fy"
+            >
+            </el-pagination>
           </el-tab-pane>
           <el-tab-pane label="自卸车" name="second">
             <el-table
               class="zxctable"
-              :data="zxcFilterData"
-              style="width: 100%"
-              max-height="855"
-              stripe
+              :data="
+                zxcFilterData.slice(
+                  (currentPage - 1) * pageSize,
+                  currentPage * pageSize
+                )
+              "
+              :show-header="true"
+              style="width: 100%; overflow-y: auto;"
             >
               <el-table-column
                 fixed
@@ -246,6 +265,17 @@
                 </template>
               </el-table-column>
             </el-table>
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-sizes="[5, 10, 20, 30, 50, 100]"
+              :page-size="pageSize"
+              layout="total, prev, pager, next, jumper"
+              :total="zxcFilterData.length"
+              class="fy"
+            >
+            </el-pagination>
           </el-tab-pane>
         </el-tabs>
       </el-container>
@@ -495,6 +525,10 @@ import XLSX from "xlsx";
 export default {
   data() {
     return {
+      // 当前页
+      currentPage: 1,
+      // 每页多少条
+      pageSize: 11,
       formLabelWidth: "120px",
       dialogFormVisible: false,
       zxcDialogFormVisible: false,
@@ -542,6 +576,12 @@ export default {
     };
   },
   methods: {
+    handleSizeChange(val) {
+      this.pageSize = val;
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val;
+    },
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },

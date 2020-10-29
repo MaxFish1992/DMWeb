@@ -36,10 +36,14 @@
           <el-tab-pane label="自卸半挂" name="first">
             <el-table
               class="bgctable"
-              :data="bgcFilterData"
-              style="width: 100%"
-              max-height="855"
-              stripe
+              :data="
+                bgcFilterData.slice(
+                  (currentPage - 1) * pageSize,
+                  currentPage * pageSize
+                )
+              "
+              :show-header="true"
+              style="width: 100%; overflow-y: auto;"
             >
               <el-table-column
                 fixed
@@ -136,14 +140,29 @@
                 </template>
               </el-table-column>
             </el-table>
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-sizes="[5, 10, 20, 30, 50, 100]"
+              :page-size="pageSize"
+              layout="total, prev, pager, next, jumper"
+              :total="bgcFilterData.length"
+              class="fy"
+            >
+            </el-pagination>
           </el-tab-pane>
           <el-tab-pane label="自卸车" name="second">
             <el-table
               class="zxctable"
-              :data="zxcFilterData"
-              style="width: 100%"
-              max-height="855"
-              stripe
+              :data="
+                zxcFilterData.slice(
+                  (currentPage - 1) * pageSize,
+                  currentPage * pageSize
+                )
+              "
+              :show-header="true"
+              style="width: 100%; overflow-y: auto;"
             >
               <el-table-column
                 fixed
@@ -171,32 +190,11 @@
                 label="客户名称"
                 width="120"
               ></el-table-column>
-              <!-- <el-table-column prop="CustomerPhone" label="客户联系方式" width="150"></el-table-column> -->
-              <!-- <el-table-column prop="Drawing" label="货厢规格" width="200"></el-table-column> -->
-              <!-- <el-table-column
-                prop=""
-                label="货厢规格"
-                width="200"
-              ></el-table-column> -->
-              <!-- <el-table-column prop="SideBoard" label="边板" width="120"></el-table-column>
-          <el-table-column prop="Floor" label="底板" width="120"></el-table-column>
-          <el-table-column prop="FrontDoor" label="前档" width="120"></el-table-column>
-              <el-table-column prop="BackDoor" label="后门" width="120"></el-table-column>-->
-              <!-- <el-table-column prop="FinalAssembly" label="总装" width="120"></el-table-column> -->
-              <!-- <el-table-column
-                prop=""
-                label="货厢类型"
-                width="120"
-              ></el-table-column> -->
               <el-table-column
                 prop="OilCylinder"
                 label="举升缸"
                 width="120"
               ></el-table-column>
-              <!-- <el-table-column prop="LeaveFactory" label="底板厚度" width="80"></el-table-column>
-              <el-table-column prop="LeaveFactory" label="边板厚度" width="80"></el-table-column>
-              <el-table-column prop="LeaveFactory" label="前挡厚度" width="80"></el-table-column>
-              <el-table-column prop="LeaveFactory" label="后门厚度" width="80"></el-table-column>-->
               <el-table-column
                 prop="CarlingNumber"
                 label="纵梁数"
@@ -241,6 +239,17 @@
                 </template>
               </el-table-column>
             </el-table>
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-sizes="[5, 10, 20, 30, 50, 100]"
+              :page-size="pageSize"
+              layout="total, prev, pager, next, jumper"
+              :total="zxcFilterData.length"
+              class="fy"
+            >
+            </el-pagination>
           </el-tab-pane>
         </el-tabs>
       </el-container>
@@ -1574,6 +1583,10 @@
 </template>
 
 <style>
+.fy{
+  text-align:right;
+  margin-top:30px;
+}
 .el-header {
   background-color: #545c64;
   color: #fff;
@@ -1632,6 +1645,10 @@ export function startUpload(data) {
 export default {
   data() {
     return {
+      // 当前页
+      currentPage: 1,
+      // 每页多少条
+      pageSize: 11,
       formLabelWidth: "120px",
       dialogPictureVisible: false,
       dialogDrawingVisible: false,
@@ -1807,6 +1824,12 @@ export default {
     };
   },
   methods: {
+     handleSizeChange(val) {
+      this.pageSize = val;
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val;
+    },
     handleSelect() {},
     beforeUpload() {
       if (this.activeName == "first") {
@@ -1959,7 +1982,7 @@ export default {
       }
       this.dialogReadonly = false;
       this.product = {};
-      this.zxcproduct={};
+      this.zxcproduct = {};
 
       var nowDate = new Date();
       let date = {
@@ -2118,7 +2141,7 @@ export default {
         }
       }
     },
-    
+
     //生成二维码
     CreateQRCode() {
       if (this.activeName == "first") {
