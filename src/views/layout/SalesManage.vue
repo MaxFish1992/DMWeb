@@ -48,7 +48,7 @@
           <el-button type="text" @click="ExportTable()">导出</el-button>
           <el-button type="text" @click="exitSystem()">退出</el-button>
         </el-header>
-        <el-tabs v-model="activeName">
+        <el-tabs v-model="activeName" type="card">
           <el-tab-pane label="自卸半挂" name="first">
             <el-table
               class="bgctable"
