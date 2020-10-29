@@ -39,6 +39,7 @@
               :data="bgcFilterData"
               style="width: 100%"
               max-height="855"
+              stripe
             >
               <el-table-column
                 fixed
@@ -142,6 +143,7 @@
               :data="zxcFilterData"
               style="width: 100%"
               max-height="855"
+              stripe
             >
               <el-table-column
                 fixed
@@ -152,12 +154,12 @@
               <el-table-column
                 prop="ProductNumber"
                 label="合同号"
-                width="120"
+                width="140"
               ></el-table-column>
               <el-table-column
                 prop="FloorType"
                 label="底盘型号"
-                width="100"
+                width="180"
               ></el-table-column>
               <el-table-column
                 prop="FloorNumber"
@@ -1493,7 +1495,7 @@
                     </el-col>
                   </el-row>
                   <el-row>
-                    <el-col :span="11">
+                    <el-col :span="18">
                       <el-form-item label="高" :label-width="formLabelWidth">
                         {{ zxcproduct.Height }}
                       </el-form-item>
@@ -1957,6 +1959,7 @@ export default {
       }
       this.dialogReadonly = false;
       this.product = {};
+      this.zxcproduct={};
 
       var nowDate = new Date();
       let date = {

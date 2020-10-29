@@ -55,6 +55,7 @@
               :data="bgcFilterData"
               style="width: 100%"
               max-height="855"
+              stripe
             >
               <el-table-column
                 fixed
@@ -158,6 +159,7 @@
               :data="zxcFilterData"
               style="width: 100%"
               max-height="855"
+              stripe
             >
               <el-table-column
                 fixed
@@ -623,6 +625,8 @@ export default {
       // console.log(date);
       // let systemDate = date.year + "-" + date.month + "-" + date.date;
 
+      this.product={};
+      this.zxcproduct={};
       if (this.activeName == "first") {
         this.dialogFormVisible = true;
         this.zxcDialogFormVisible = false;
