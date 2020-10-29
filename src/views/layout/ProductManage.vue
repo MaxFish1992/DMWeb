@@ -794,10 +794,10 @@
                   </el-col>
                 </el-row>
                 <el-row>
-                  <el-col :span="12">
+                  <el-col :span="22">
                     <el-form-item label="高">
                       <el-input
-                        style="width: 150px"
+                        style="width: 250px"
                         v-model="zxcproduct.Height"
                         auto-complete="off"
                         :readonly="dialogReadonly"
@@ -1316,7 +1316,7 @@
               <el-col :span="7">
                 <el-form>
                   <el-form-item label="喷涂：" :label-width="formLabelWidth">
-                    {{ product.SprayPaint }}
+                    {{ product.CarriageColor }}
                   </el-form-item>
                 </el-form>
               </el-col>
@@ -1495,7 +1495,7 @@
                     </el-col>
                   </el-row>
                   <el-row>
-                    <el-col :span="18">
+                    <el-col :span="22">
                       <el-form-item label="高" :label-width="formLabelWidth">
                         {{ zxcproduct.Height }}
                       </el-form-item>
