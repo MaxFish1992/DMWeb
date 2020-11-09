@@ -616,6 +616,20 @@
                     ></el-option>
                   </el-select>
                 </el-form-item>
+                <el-form-item label="牵引销" :label-width="formLabelWidth">
+                  <el-select
+                    v-model="product.ABS"
+                    placeholder="请选择"
+                    style="width: 180px"
+                  >
+                    <el-option
+                      v-for="item in TractionPinTypes"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    ></el-option>
+                  </el-select>
+                </el-form-item>
               </el-form>
             </el-col>
             <el-col :span="12">
@@ -909,6 +923,8 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="SaveProductInfo()">确 定</el-button>
+        <el-button type="primary" @click="CopyProductInfo()">复 制</el-button>
+        <el-button type="primary" @click="PasteProductInfo()">粘 贴</el-button>
         <el-button type="primary" @click="CreateQRCode()">生成二维码</el-button>
         <el-button type="primary" @click="zxcPrintPreview()"
           >打印预览</el-button
@@ -1278,17 +1294,24 @@
                 margin-top: 20px;
               "
             >
-              <el-col :span="10">
+              <el-col :span="7">
                 <el-form>
                   <el-form-item label="车桥：" :label-width="formLabelWidth">
                     {{ product.Axle }}
                   </el-form-item>
                 </el-form>
               </el-col>
-              <el-col :span="10">
+              <el-col :span="7">
                 <el-form>
                   <el-form-item label="ABS：" :label-width="formLabelWidth">
                     {{ product.ABS }}
+                  </el-form-item>
+                </el-form>
+              </el-col>
+               <el-col :span="7">
+                <el-form>
+                  <el-form-item label="牵引销：" :label-width="formLabelWidth">
+                    {{ product.TractionPin }}
                   </el-form-item>
                 </el-form>
               </el-col>
@@ -1724,6 +1747,16 @@ export default {
           label: "威薄科",
         },
       ],
+      TractionPinTypes:[
+        {
+          value: "50",
+          label: "50",
+        },
+        {
+          value: "90",
+          label: "90",
+        },
+      ],
       pickerOptions: {
         // disabledDate(time) {
         //   return time.getTime() > Date.now();
@@ -1780,6 +1813,7 @@ export default {
         HasAdjustingArm: "",
         HasAirSuspension: "",
         ABS: "",
+        TractionPin:"",
         TireBrand: "",
         TireShape: "",
         TireNum: "",
@@ -1794,6 +1828,7 @@ export default {
         CarriageColor: "",
         Mark: "",
       },
+      zxcCopyProduct:{},
       zxcproduct: {
         OrderDate: "",
         DeliveryDate: "",
@@ -2141,7 +2176,12 @@ export default {
         }
       }
     },
-
+    CopyProductInfo(){
+      this.zxcCopyProduct=JSON.parse(JSON.stringify(this.zxcproduct));
+    },
+    PasteProductInfo(){
+      this.zxcproduct=JSON.parse(JSON.stringify(this.zxcCopyProduct));
+    },
     //生成二维码
     CreateQRCode() {
       if (this.activeName == "first") {
